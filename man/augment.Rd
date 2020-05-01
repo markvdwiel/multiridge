@@ -19,7 +19,7 @@ Data frame or data matrix of dimension \code{n_2 x p}
 }
   }
 \details{
-Xdata1 and Xdata2 should have the same number of columns. These represent variables. Augments both data matrices with zeros, 
+Xdata1 and Xdata2 should have the same number of columns. These columns represent variables. Augments both data matrices with zeros, 
 such that the matrices can be paired using \code{\link{createXXblocks}} on the output of this function. 
 }
 \value{
