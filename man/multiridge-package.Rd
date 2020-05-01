@@ -37,5 +37,6 @@ Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2020). Fast CV for
 \seealso{
 }
 \examples{
-#A complete demo on real data is available at: 
+#A full demo and data are available from:
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
