@@ -86,7 +86,6 @@ List, with components:
 \item{allsc}{Matrix with CV scores for all penalty parameter configurations used by the optimizer}
 }
 
-res = res, lambdas = lambdas, optpen = lambdas3
 \references{
 %% ~put references to the literature/web site here ~
 }

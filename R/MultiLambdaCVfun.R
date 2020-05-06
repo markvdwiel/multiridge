@@ -501,8 +501,8 @@ minus <- FALSE
     probab <- as.numeric(1/(1+exp(-lp)))
     if (class(response) == "factor") Y <- as.numeric(response) - 1 else Y <- response
     if(score=="loglik") thescore <- mean(dbinom(Y,size=1,probab,log=TRUE))
-    if(score=="auc") {thescore <- try(as.numeric(pROC:::auc(Y,probab,smooth=T)),silent=T);
-    suppressWarnings(if(class(thescore)=="try-error") thescore <- as.numeric(pROC:::auc(Y,probab,smooth=F)))}
+    if(score=="auc") {thescore <- try(as.numeric(pROC::auc(Y,probab,smooth=T)),silent=T);
+    suppressWarnings(if(class(thescore)=="try-error") thescore <- as.numeric(pROC::auc(Y,probab,smooth=F)))}
     if(score=="rankboost") {whpos <- which(Y==1); thescore <- mean(1/(1+exp(-2*(outer(probab[whpos],probab[-whpos],"-")))))}
     if(score=="brier") {thescore <- mean(-(Y-probab)^2); minus<-TRUE }
   }

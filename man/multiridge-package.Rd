@@ -6,7 +6,7 @@
 Fast cross-validation for multi-penalty ridge regression
 }
 \description{
-The package implements multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation. It allows for multiple high-dimensional data types that require penalization, as well as unpenalized variables. Moreover, it allows a paired penalty for paired data types, and preferential data types can be specified. 
+The package implements multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation. It allows for multiple high-dimensional data types that require penalization, as well as unpenalized variables. Moreover, it allows a paired penalty for paired data types, and preferential data types can be specified.
 }
 \details{
 
@@ -34,9 +34,8 @@ Mark A. van de Wiel (mark.vdwiel@amsterdamumc.nl)
 Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2020). Fast CV for multi-omics ridge regression.
 }
 \keyword{ package }
-\seealso{
+\seealso{A full demo and data are available from:
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 \examples{
-#A full demo and data are available from:
-\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
