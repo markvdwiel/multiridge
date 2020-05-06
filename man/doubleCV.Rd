@@ -91,7 +91,7 @@ Integer. Maximum number of iterations for \code{optmethod2}.
 Boolean. If TRUE appends the penalties and resulting CVscore to global variable \code{allscores}
 }
   \item{parallel}{
-Boolean. Should computation be done in parellel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
+Boolean. Should computation be done in parallel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
 }
   \item{pref}{
 Integer vector or \code{NULL}. Contains indices of data types in \code{XXblocks} that are preferential.

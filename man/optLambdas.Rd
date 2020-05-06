@@ -65,7 +65,7 @@ Integer. Maximum number of iterations for \code{optmethod}.
 Boolean. If TRUE appends the penalties and resulting CVscore to global variable \code{allscores}
 }
   \item{parallel}{
-Boolean. Should computation be done in parellel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
+Boolean. Should computation be done in parallel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
 }
   \item{fixedpen}{
 Integer vector or \code{NULL}. Contains indices of data types of which penalty is fixed to the corresponding value in \code{penaltiesinit}.

@@ -22,10 +22,10 @@ Integer vector of size 2 (or \code{NULL})
 }
 }
 \details{
-The efficiency of \code{multiridge} for high-dimendional data relies largely on this function: 
-all iterative calculation are performed on the out put of this function, which contains \code{B} blocks of 
-\code{nxn} matrices. If \code{which2pair != NULL}, the function adds a paired covariance block, pairing the two data blocks corresponding to the elements of \code{which2pair}. If predictions for new samples are desired, one also needs to specify 
-\code{datablocksnew}, which should have he exact same format as \code{datablocks} with matching column dimension (nr of variables).
+The efficiency of \code{multiridge} for high-dimendional data relies largely on this function:
+all iterative calculation are performed on the out put of this function, which contains \code{B} blocks of
+\code{nxn} matrices. If \code{which2pair != NULL}, the function adds a paired covariance block, pairing the two data blocks corresponding to the elements of \code{which2pair}. If predictions for new samples are desired, one also needs to specify
+\code{datablocksnew}, which should have he exact same format as \code{datablocks} with matching column dimension (number of variables).
 }
 \value{
 List. Same number of component as \code{datablocks} when \code{which2pair = NULL}, or augmented with one paired data block.

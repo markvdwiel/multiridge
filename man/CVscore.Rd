@@ -2,10 +2,10 @@
 \alias{CVscore}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Cross-validated score 
+Cross-validated score
 }
 \description{
-Cross-validated score for given penalty parameters. 
+Cross-validated score for given penalty parameters.
 }
 \usage{
 CVscore(penalties, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = "logistic", eps = 1e-07, maxItr = 100, trace = FALSE, printCV = TRUE, save = FALSE, parallel = F)
@@ -37,7 +37,7 @@ Boolean. Should an intercept be included?
 Scalar. Prior fraction of cases. Only relevant for \code{model=" logistic"}.
 }
   \item{score}{
-Character. See Details. 
+Character. See Details.
 }
   \item{model}{
 Character. Any of \code{c("linear", "logistic", "cox")}.
@@ -58,7 +58,7 @@ Boolean. Should the CV-score be printed on screen?
 Boolean. If TRUE appends the penalties and resulting CVscore to global variable \code{allscores}
 }
   \item{parallel}{
-Boolean. Should computation be done in parellel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
+Boolean. Should computation be done in parallel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
 }
 }
 \details{
