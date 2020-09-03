@@ -6,7 +6,7 @@
 Fast cross-validation for multi-penalty ridge regression
 }
 \description{
-The package implements multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation. It allows for multiple high-dimensional data types that require penalization, as well as unpenalized variables. Moreover, it allows a paired penalty for paired data types, and preferential data types can be specified.
+The package implements multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation or marginal likelihood maximization. It allows for multiple high-dimensional data types that require penalization, as well as unpenalized variables. Moreover, it allows a paired penalty for paired data types, and preferential data types can be specified.
 }
 \details{
 
@@ -21,7 +21,8 @@ The DESCRIPTION file:
 \code{\link{fastCV}}: Fast cross-validation per data block\cr
 \code{\link{IWLSCoxridge}}: Iterative weighted least squares algorithm for Cox ridge regression \cr
 \code{\link{IWLSridge}}: Iterative weighted least squares algorithm for linear and logistic ridge regression \cr
-\code{\link{optLambdasWrap}}: Find optimal ridge penalties  \cr
+\code{\link{optLambdasWrap}}: Find optimal ridge penalties by cross-validation  \cr
+\code{\link{optLambdas_mgcvWrap}}: Find optimal ridge penalties in terms of marginal likelihood  \cr
 \code{\link{predictIWLS}}: Predictions from ridge fits \cr
 \code{\link{setupParallel}}: Setting up parallel computing\cr
 \code{\link{SigmaFromBlocks}}: Create penalized sample cross-product matrix
