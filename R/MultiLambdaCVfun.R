@@ -28,7 +28,8 @@ setupParallel <- function(ncpus=1, sourcefile=NULL,sourcelibraries=c("multiridge
 #Fast single lambda CV, based on SVD. Uses optL2 from penalized package, which uses identical IWLS algorithm as below
 fastCV <- function(Xblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),parallel=FALSE,fixedfolds = TRUE,
                    model="logistic", eps=1e-10){
-  # Xblocks <- list(X1=matrix(rnorm(100),nrow=10),X2=matrix(rnorm(100),nrow=10));Y <- rnorm(10);X1=NULL;intercept=FALSE;model="linear";kfold=10
+  # Xblocks <- list(X1=matrix(rnorm(20000),nrow=100),X2=matrix(rnorm(20000),nrow=100));Y <- rbinom(100,size=1,prob=0.5);X1=NULL;intercept=FALSE;model="linear";kfold=10
+  #Xblocks[[1]]<-t(t(Xblocks[[1]])-apply(Xblocks[[1]],2,mean)); Xblocks[[2]]<-t(t(Xblocks[[2]])-apply(Xblocks[[2]],2,mean))
   # parallel=FALSE;fixedfolds = TRUE;eps=eps=1e-10
   #Xblocks<- Xbl; Y<- surv;X1<- NULL; kfold=10;intercept=ifelse(class(Y)=="Surv", FALSE, TRUE);parallel=FALSE;fixedfolds = TRUE
   if(parallel & !exists("runsetup")) {
@@ -53,7 +54,9 @@ fastCV <- function(Xblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv",
     }
  # } else fold2 <- kfold
   datasvd <- svd(X)
-  dataF <- X %*% datasvd$v
+  centered <- abs(mean(X[,1])) <= 10^{-10}
+  if(centered) dataF <- X %*% datasvd$v[,(1:(nrow(X)-1))] else  dataF <- X %*% datasvd$v
+
   if(is.null(X1)) {
     if(intercept) {unpen <- ~1} else {unpen <- ~0}
     } else {
