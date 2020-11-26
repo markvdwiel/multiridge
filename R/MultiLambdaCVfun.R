@@ -989,7 +989,7 @@ mgcv_lambda <- function(penalties, XXblocks,Y, model, printscore=TRUE){
   XXT <- SigmaFromBlocks(XXblocks,penalties=penalties)
   n <- nrow(XXT)
   XXTi <- try(solve(XXT), silent=TRUE)
-  if(class(XXTi)=="try-error"){ #rank of matrix might be n-1 due to scaling... take Moore-Penrose inverse
+  if(class(XXTi)[1]=="try-error"){ #rank of matrix might be n-1 due to scaling... take Moore-Penrose inverse
     pmt <- proc.time()
     svdXXT <- svd(XXT)
     svdd <- svdXXT$d
