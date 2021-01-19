@@ -7,7 +7,7 @@ Double cross-validation for estimating performance of \code{multiridge}
 \description{
 Double cross-validation for estimating performance of \code{multiridge}. Outer fold is for testing, inner fold for penalty parameter tuning}
 \usage{
-doubleCV(penaltiesinit, XXblocks, Y, X1 = NULL, pairing = NULL, outfold = 5, infold = 10, nrepeatout = 1, nrepeatin = 1, balance = TRUE, fixedfolds = TRUE, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = "logistic", eps = 1e-07, maxItr = 10, trace = FALSE, printCV = TRUE, reltol = 1e-04, optmethod1 = "SANN", optmethod2 = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt1 = 10, maxItropt2 = 25, save = FALSE, parallel = FALSE, pref = NULL, fixedpen = NULL)
+doubleCV(penaltiesinit, XXblocks, Y, X1 = NULL, pairing = NULL, outfold = 5, infold = 10, nrepeatout = 1, nrepeatin = 1, balance = TRUE, fixedfolds = TRUE, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = NULL, eps = 1e-07, maxItr = 10, trace = FALSE, printCV = TRUE, reltol = 1e-04, optmethod1 = "SANN", optmethod2 = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt1 = 10, maxItropt2 = 25, save = FALSE, parallel = FALSE, pref = NULL, fixedpen = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -54,7 +54,8 @@ Scalar. Prior fraction of cases. Only relevant for \code{model=" logistic"}.
 Character. See Details.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{eps}{
 Scalar. Numerical bound for IWLS convergence.

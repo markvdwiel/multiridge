@@ -8,7 +8,7 @@ Find optimal ridge penalties with maximimum marginal likelihood
 Optimizes a marginal likelihood score w.r.t. ridge penalties for multiple data blocks.
 }
 \usage{
-optLambdas_mgcv(penaltiesinit=NULL, XXblocks,Y, model="logistic", reltol=1e-4, optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"), maxItropt=500,tracescore=TRUE,fixedseed =TRUE)
+optLambdas_mgcv(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4, optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"), maxItropt=500,tracescore=TRUE,fixedseed =TRUE, sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,8 +21,13 @@ List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
   \item{Y}{
 Response vector: numeric, binary, factor or \code{survival}.
 }
+
+\item{pairing}{Numerical vector of length 3 or \code{NULL} when pairs are absent. Represents the indices (in \code{XXblocks}) of the two data blocks involved in pairing, plus the index of the paired block.
+}
+
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{reltol}{
 Scalar. Relative tolerance for optimization methods.
@@ -40,6 +45,13 @@ Boolean. Should the output of the scores be traced?
   \item{fixedseed}{
 Boolean. Should the initialization be fixed? For reproducibility.
 }
+
+\item{sigmasq}{Default error variance.
+}
+
+\item{opt.sigma}{Boolean. Should the error variance be optimized as well? Only relevant for \code{model="linear"}.
+}
+
 }
 \details{
 See \code{\link[mgcv]{gam}} for details on how the marginal likelihood is computed.

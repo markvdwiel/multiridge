@@ -8,7 +8,7 @@ Cross-validated score
 Cross-validated score for given penalty parameters.
 }
 \usage{
-CVscore(penalties, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = "logistic", eps = 1e-07, maxItr = 100, trace = FALSE, printCV = TRUE, save = FALSE, parallel = F)
+CVscore(penalties, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = NULL, eps = 1e-07, maxItr = 100, trace = FALSE, printCV = TRUE, save = FALSE, parallel = F)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,7 +40,8 @@ Scalar. Prior fraction of cases. Only relevant for \code{model=" logistic"}.
 Character. See Details.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{eps}{
 Scalar. Numerical bound for IWLS convergence.

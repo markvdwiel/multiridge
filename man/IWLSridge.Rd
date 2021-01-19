@@ -2,14 +2,14 @@
 \alias{IWLSridge}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Iterative weighted least squares algorithm for linear and logistic ridge regression. 
+Iterative weighted least squares algorithm for linear and logistic ridge regression.
 
 }
 \description{
-Iterative weighted least squares algorithm for linear and logistic ridge regression. Updates the weights and linear predictors until convergence. 
+Iterative weighted least squares algorithm for linear and logistic ridge regression. Updates the weights and linear predictors until convergence.
 }
 \usage{
-IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07, maxItr = 25, trace = FALSE, model = "logistic", E0 = NULL)
+IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07, maxItr = 25, trace = FALSE, model = NULL, E0 = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,7 +17,7 @@ IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07, maxItr
 Matrix. Dimensions \code{nxn}. Sample cross-product from penalized variables, usually computed by \code{\link{SigmaFromBlocks}}.
 }
   \item{Y}{
-Response vector: numeric, binary, or two-class factor 
+Response vector: numeric, binary, or two-class factor
 }
    \item{X1}{
 Matrix. Dimension \code{n x p_0, p_0 < n}, representing unpenalized covariates.
@@ -38,10 +38,11 @@ Integer. Maximum number of iterations used in IWLS.
 Boolean. Should the output of the IWLS algorithm be traced?
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic")}. Note that the cox model for survival is covered by the function \code{\link{IWLSCoxridge}}.
+Character. Any of \code{c("linear", "logistic")}. Is inferred from
+\code{Y} when \code{NULL}. Note that the cox model for survival is covered by the function \code{\link{IWLSCoxridge}}.
 }
  \item{E0}{
-Numerical vector or \code{NULL}. Optional initial values for linear predictor. Same length as \code{Y}. Usually \code{NULL}, which initializes linear predictor with 0. 
+Numerical vector or \code{NULL}. Optional initial values for linear predictor. Same length as \code{Y}. Usually \code{NULL}, which initializes linear predictor with 0.
 }
 }
 \details{
@@ -73,8 +74,8 @@ List, containing:
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{IWLSCoxridge}} for Cox ridge. \code{\link{betasout}} for obtaining parameter estimates. 
-\code{\link{predictIWLS}} for predictions on new samples. 
+\code{\link{IWLSCoxridge}} for Cox ridge. \code{\link{betasout}} for obtaining parameter estimates.
+\code{\link{predictIWLS}} for predictions on new samples.
 }
 \examples{
 

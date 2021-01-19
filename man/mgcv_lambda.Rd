@@ -8,7 +8,8 @@ Maximum marginal likelihood score
 Computed maximum marginal likelihood score for given penalty parameters using \code{mgcv}.
 }
 \usage{
-mgcv_lambda(penalties, XXblocks,Y, model, printscore=TRUE))
+mgcv_lambda(penalties, XXblocks,Y, model=NULL, printscore=TRUE, pairing=NULL, sigmasq = 1,
+                        opt.sigma=ifelse(model=="linear",T, F))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,8 +23,23 @@ List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
 Response vector: numeric, binary, factor or \code{survival}.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
+
+\item{printscore}{Boolean. Should the score be printed?
+}
+
+\item{pairing}{Numerical vector of length 3 or \code{NULL} when pairs are absent. Represents the indices (in \code{XXblocks}) of the two data blocks involved in pairing, plus the index of the paired block.
+}
+
+\item{sigmasq}{Default error variance.
+}
+
+\item{opt.sigma}{Boolean. Should the error variance be optimized as well? Only relevant for \code{model="linear"}.
+}
+
+
 }
 \details{
 See \code{\link[mgcv]{gam}} for details on how the marginal likelihood is computed.

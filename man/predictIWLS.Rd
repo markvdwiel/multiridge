@@ -5,7 +5,7 @@
 Predictions from ridge fits
 }
 \description{
-Produces predictions from ridge fits for new data. 
+Produces predictions from ridge fits for new data.
 }
 \usage{
 predictIWLS(IWLSfit, X1new = NULL, Sigmanew)
@@ -13,20 +13,25 @@ predictIWLS(IWLSfit, X1new = NULL, Sigmanew)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{IWLSfit}{
-List, containing fits from either \code{\link{IWLSridge}} (linear, logistic ridge) or \code{\link{IWLSCoxridge}}
+List, containing fits from either \code{\link{IWLSridge}} (linear, logistic
+ridge) or \code{\link{IWLSCoxridge}}
 }
   \item{X1new}{
-Matrix. Dimension \code{nnew x p_0}, representing unpenalized covariates for new data.
+Matrix. Dimension \code{nnew x p_0}, representing unpenalized covariates for
+new data.
 }
   \item{Sigmanew}{
-Matrix. Dimensions \code{nnew x n}. Sample cross-product from penalized variables, usually computed by first applying \code{\link{createXXblocks}} and then \code{\link{SigmaFromBlocks}}.
+Matrix. Dimensions \code{nnew x n}. Sample cross-product from penalized
+variables, usually computed by first applying \code{\link{createXXblocks}}
+and then \code{\link{SigmaFromBlocks}}.
 }
 }
 \details{
-Predictions rely purely on the linear predictors, and do not require producing the parameter vector. 
+Predictions rely purely on the linear predictors, and do not require producing
+the parameter vector.
 }
 \value{
-Numerical vector of linear predictor for the test samples. 
+Numerical vector of linear predictor for the test samples.
 }
 \references{
 %% ~put references to the literature/web site here ~
@@ -41,11 +46,14 @@ Numerical vector of linear predictor for the test samples.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{IWLSridge}} (\code{\link{IWLSCoxridge}}) for fitting linear and logistic ridge (Cox ridge). \code{\link{betasout}} for obtaining parameter estimates. 
-\code{\link{Scoring}} to evaluate the predictions. 
+\code{\link{IWLSridge}} (\code{\link{IWLSCoxridge}}) for fitting linear and
+logistic ridge (Cox ridge). \code{\link{betasout}} for obtaining parameter
+estimates.
+\code{\link{Scoring}} to evaluate the predictions.
 }
 \examples{
-#Example below shows how to create the input argument Sigmanew (for simulated data)
+#Example below shows how to create the input argument Sigmanew (for simulated
+data)
 #Simulate
 Xbl1 <- matrix(rnorm(1000),nrow=10)
 Xbl2 <- matrix(rnorm(2000),nrow=10)

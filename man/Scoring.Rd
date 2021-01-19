@@ -8,7 +8,8 @@ Evaluate predictions
 Evaluates predictions by a score suitable for the corresponding response
 }
 \usage{
-Scoring(lp, Y, model = "logistic", score = ifelse(model == "linear", "mse", "loglik"), print = TRUE)
+Scoring(lp, Y, model = NULL, score = ifelse(model == "linear", "mse", "loglik"),
+print = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,22 +20,23 @@ Numerical vector. Linear predictor.
 Response vector: numeric, binary, factor or \code{survival}.
 }
   \item{score}{
-Character. See Details. 
+Character. See Details.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{print}{
-Boolean. Should the score be printed on screen. 
+Boolean. Should the score be printed on screen.
 }
 }
 \details{
-Several scores are allowed, depending on the type of output. For \code{model = "linear"}, 
-\code{score} equals any of \code{c("loglik","mse","abserror","cor","kendall","spearman")}, denoting 
+Several scores are allowed, depending on the type of output. For \code{model = "linear"},
+\code{score} equals any of \code{c("loglik","mse","abserror","cor","kendall","spearman")}, denoting
 CV-ed log-likelihood, mean-squared error, mean absolute error, Pearson (Kendall, Spearman) correlation with response.
-For \code{model = "logistic"}, \code{score} equals any of \code{c("loglik","auc", "brier")}, denoting 
-CV-ed log-likelihood, area-under-the-ROC-curve, and brier score a.k.a. MSE. 
-For \code{model = "cox"}, \code{score} equals any of \code{c("loglik","cindex")}, denoting 
+For \code{model = "logistic"}, \code{score} equals any of \code{c("loglik","auc", "brier")}, denoting
+CV-ed log-likelihood, area-under-the-ROC-curve, and brier score a.k.a. MSE.
+For \code{model = "cox"}, \code{score} equals any of \code{c("loglik","cindex")}, denoting
 CV-ed log-likelihood, and c-index. %%  ~~ If necessary, more details than the description above ~~
 }
 \value{

@@ -9,7 +9,11 @@ Sequentially optimizes a cross-validated score w.r.t. ridge penalties for multip
 Also implements preferential ridge, which allows to first optimize for the preferential data types.
 }
 \usage{
-optLambdasWrap(penaltiesinit = NULL, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = "logistic", epsIWLS = 0.001, maxItrIWLS = 25, traceCV = TRUE, reltol = 1e-04, optmethod1 = "SANN", optmethod2 = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt1 = 10, maxItropt2 = 25, save = FALSE, parallel = FALSE, pref = NULL, fixedpen = NULL)
+optLambdasWrap(penaltiesinit = NULL, XXblocks, Y, X1 = NULL, pairing = NULL,
+folds, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL,
+score = "loglik", model = NULL, epsIWLS = 0.001, maxItrIWLS = 25,
+traceCV = TRUE, reltol = 1e-04, optmethod1 = "SANN", optmethod2 =
+ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt1 = 10, maxItropt2 = 25, save = FALSE, parallel = FALSE, pref = NULL, fixedpen = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,11 +29,13 @@ Response vector: numeric, binary, factor or \code{survival}.
   \item{X1}{
 Matrix. Dimension \code{n x p_0, p_0 < n}, representing unpenalized covariates }
   \item{pairing}{
-Numerical vector of length 3 or \code{NULL} when pairs are absent. Represents the indices (in \code{XXblocks}) of the two data blocks involved in pairing,
+Numerical vector of length 3 or \code{NULL} when pairs are absent. Represents
+the indices (in \code{XXblocks}) of the two data blocks involved in pairing,
 plus the index of the paired block.
 }
     \item{folds}{
-List, containing the splits of the samples. Usually obtained by \code{\link{CVfolds}}
+List, containing the splits of the samples. Usually obtained by
+\code{\link{CVfolds}}
 }
  \item{intercept}{
 Boolean. Should an intercept be included?
@@ -41,7 +47,8 @@ Scalar. Prior fraction of cases. Only relevant for \code{model=" logistic"}.
 Character. See Details.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{epsIWLS}{
 Scalar. Numerical bound for IWLS convergence.
@@ -56,12 +63,15 @@ Boolean. Should the output of the IWLS algorithm be traced?
 Scalar. Relative tolerance for optimization methods.
 }
  \item{optmethod1}{
-Character. First, global search method. Any of the methods \code{c("Brent", "Nelder-Mead", "Sann")} may be used, but
-simulated annealing by \code{"Sann"} is recommended to search a wide landscape. Other unconstrained methods
+Character. First, global search method. Any of the methods \code{c("Brent",
+"Nelder-Mead", "Sann")} may be used, but
+simulated annealing by \code{"Sann"} is recommended to search a wide landscape.
+Other unconstrained methods
 offered by \code{\link{optim}} may also be used, but have not been tested.
 }
   \item{optmethod2}{
-Character. Second, local search method. Any of the methods \code{c("Brent", "Nelder-Mead", "Sann")} may be used, but
+Character. Second, local search method. Any of the methods \code{c("Brent",
+"Nelder-Mead", "Sann")} may be used, but
 \code{"Nelder-Mead"} is generally recommended. Other unconstrained methods
 offered by \code{\link{optim}} may also be used, but have not been tested.
 }
@@ -79,18 +89,24 @@ Boolean. If TRUE appends the penalties and resulting CVscore to global variable 
 Boolean. Should computation be done in parallel? If \code{TRUE}, requires to run \code{\link{setupParallel}} first.
 }
   \item{pref}{
-Integer vector or \code{NULL}. Contains indices of data types in \code{XXblocks} that are preferential.
+Integer vector or \code{NULL}. Contains indices of data types in \code{XXblocks}
+that are preferential.
 }
   \item{fixedpen}{
-Integer vector or \code{NULL}. Contains indices of data types of which penalty is fixed to the corresponding value in \code{penaltiesinit}.
+Integer vector or \code{NULL}. Contains indices of data types of which penalty
+is fixed to the corresponding value in \code{penaltiesinit}.
 }
 }
 \details{
-As opposed to \code{\link{optLambdas}} this function first searches globally, then locally.
+As opposed to \code{\link{optLambdas}} this function first searches globally,
+then locally.
 Hence, more time-consuming, but better guarded against multiple local optima.
 
-See \code{\link{Scoring}} for details on \code{score}. We highly recommend to use smooth scoring functions, in particular \code{"loglik"}.
-For ranking-based criteria like \code{"auc"} and \code{"cindex"} we advise to use repeated CV (see \code{\link{CVfolds}}) to avoid ending up in any of the many local optima.
+See \code{\link{Scoring}} for details on \code{score}. We highly recommend to
+use smooth scoring functions, in particular \code{"loglik"}.
+For ranking-based criteria like \code{"auc"} and \code{"cindex"} we advise to
+use repeated CV (see \code{\link{CVfolds}}) to avoid ending up in any of the
+many local optima.
 }
 \value{
 List, with components:

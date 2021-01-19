@@ -8,7 +8,7 @@ Fast, SVD-based cross-validation per data block
 Fast, SVD-based cross-validation for high-dimensional data. Finds optimal penalties separately per data block. Useful for initialization.
 }
 \usage{
-fastCV(Xblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), parallel = FALSE, fixedfolds = TRUE, model = "logistic", eps = 1e-10)
+fastCV(Xblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), parallel = FALSE, fixedfolds = TRUE, model = NULL, eps = 1e-10)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,7 +34,8 @@ Boolean. Should computation be done in parallel? If \code{TRUE}, requires to run
 Boolean. Should fixed splits be used for reproducibility?
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{eps}{
 Scalar. Numerical bound for IWLS convergence.
