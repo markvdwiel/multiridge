@@ -27,11 +27,18 @@ setupParallel <- function(ncpus=1, sourcefile=NULL,sourcelibraries=c("multiridge
 
 #Fast single lambda CV, based on SVD. Uses optL2 from penalized package, which uses identical IWLS algorithm as below
 fastCV <- function(Xblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),parallel=FALSE,fixedfolds = TRUE,
-                   model="logistic", eps=1e-10){
+                   model=NULL, eps=1e-10){
   # Xblocks <- list(X1=matrix(rnorm(20000),nrow=100),X2=matrix(rnorm(20000),nrow=100));Y <- rbinom(100,size=1,prob=0.5);X1=NULL;intercept=FALSE;model="linear";kfold=10
   #Xblocks[[1]]<-t(t(Xblocks[[1]])-apply(Xblocks[[1]],2,mean)); Xblocks[[2]]<-t(t(Xblocks[[2]])-apply(Xblocks[[2]],2,mean))
   # parallel=FALSE;fixedfolds = TRUE;eps=eps=1e-10
   #Xblocks<- Xbl; Y<- surv;X1<- NULL; kfold=10;intercept=ifelse(class(Y)=="Surv", FALSE, TRUE);parallel=FALSE;fixedfolds = TRUE
+  
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+  
   if(parallel & !exists("runsetup")) {
     message("ERROR: For parallel computing, please run setupParallel() function first")
     message("Use sourcelibraries=c(\"penalized\")")
@@ -86,7 +93,7 @@ fastCV <- function(Xblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv",
 
 
 #FITTING: efficient IWLS algorithm for logistic and linear (only one iteration)
-IWLSridge <- function(XXT,Y,X1=NULL,intercept=TRUE,frac1=NULL,eps=1e-7,maxItr=25,trace=FALSE, model="logistic", E0=NULL){
+IWLSridge <- function(XXT,Y,X1=NULL,intercept=TRUE,frac1=NULL,eps=1e-7,maxItr=25,trace=FALSE, model=NULL, E0=NULL){
   #Input:
   #XXT:  sample cross-product (nxn matrix) from penalized variables [computed by SigmaFromBlocks]
   #Y: nx1 response
@@ -118,6 +125,8 @@ IWLSridge <- function(XXT,Y,X1=NULL,intercept=TRUE,frac1=NULL,eps=1e-7,maxItr=25
 
   #in terms of hat matrix
   #note: eta is lin pred without intercept; etatot incl intercept
+  if(is.null(model)) model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+  
   n <- length(Y)
   if(intercept & is.null(frac1)) X1 <- cbind(matrix(rep(1,n),ncol=1),X1) #if frac1 is not given intercept is estimated alongside all other parameters
   if(intercept & !is.null(frac1)) eta0 <- log((frac1)/(1-frac1)) else eta0 <-  0 #if frac1 is given it is used to estimate the intercept
@@ -420,7 +429,7 @@ return(pred)
 
 
 #Function for creating (balanced) folds
-CVfolds <- function(Y,model="logistic",balance=TRUE,kfold=10,fixedfolds=TRUE,nrepeat=1){ #response is required for balanced CV
+CVfolds <- function(Y,model=NULL,balance=TRUE,kfold=10,fixedfolds=TRUE,nrepeat=1){ #response is required for balanced CV
 #response: response vector, length n
 #model: "logistic", "cox", etc
 #balance: should the splits balance levels of the response?
@@ -429,6 +438,11 @@ CVfolds <- function(Y,model="logistic",balance=TRUE,kfold=10,fixedfolds=TRUE,nre
 #nrepeat: number of repeats of the CV
 #Output: list object with kfold elements containing the sample indices of the left-out samples per fold
 
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
   response <- Y
   if(model=="linear") balance <- FALSE
   CVfoldsrep <- function(rep){
@@ -488,12 +502,22 @@ CVfolds <- function(Y,model="logistic",balance=TRUE,kfold=10,fixedfolds=TRUE,nre
 }
 
 #Score function for evaluation of predictions
-Scoring <- function(lp,Y,model="logistic",score=ifelse(model=="linear","mse","loglik"),print=TRUE){
+Scoring <- function(lp,Y,model=NULL,score=ifelse(model=="linear","mse","loglik"),print=TRUE){
 #lp: linear predictor, same size as response
 #response: response vector
 #score: score
 #model: either "logistic", "cox", "linear"
 #output: score (numeric)
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+  
+if(model=="linear" && score=="loglik"){
+  score <-  "mse"
+  print("Switching to MSE score for linear model")
+}  
 response <- Y
 minus <- FALSE
   if (model == "linear"){
@@ -537,7 +561,7 @@ minus <- FALSE
 
 
 #Computes predictive score using CV
-CVscore <- function(penalties, XXblocks,Y,X1=NULL, pairing=NULL,folds, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model="logistic",
+CVscore <- function(penalties, XXblocks,Y,X1=NULL, pairing=NULL,folds, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model = NULL,
                     eps=1e-7,maxItr=100,trace=FALSE,printCV=TRUE,save=FALSE,parallel=F){
 
   #XXblocks: list of B matrices, dim nxn, each representing block-specific cross-product [each XXTb = t(X_b) %*% X_b for b=1, ..., B data types].
@@ -569,6 +593,13 @@ CVscore <- function(penalties, XXblocks,Y,X1=NULL, pairing=NULL,folds, intercept
   #model="cox";eps= 1e-7;maxItr=100;trace=FALSE;
   # printCV=TRUE; save=FALSE;parallel=FALSE;pairing <- NULL
   #
+  
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+  
   response <- Y
   if(parallel & !exists("runsetup")) {
     message("ERROR: For parallel computing, please run setupParallel() function first")
@@ -619,7 +650,7 @@ CVscore <- function(penalties, XXblocks,Y,X1=NULL, pairing=NULL,folds, intercept
 #####################################################################################################
 
 #OPTIMIZATION OF CV CRITERION; ONE OPTIMIZER
-optLambdas <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL, folds, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model="logistic",
+optLambdas <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL, folds, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model=NULL,
                        epsIWLS=1e-3,maxItrIWLS=25, traceCV=TRUE, reltol=1e-4, optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
                        maxItropt=500, save=FALSE, parallel=FALSE, fixedpen=NULL, fixedseed=TRUE){
 #Arguments additional to those of CVscore:
@@ -639,6 +670,12 @@ optLambdas <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL, fol
   # penaltiesinit=lambdas; XXblocks=XXomics12;Y=resp;X1=NULL;folds=leftout;intercept=ifelse(class(Y)=="Surv", FALSE, TRUE);frac1=NULL;score="loglik"; model="logistic";maxItrIWLS = 25;
   # parallel=TRUE;epsIWLS=1e-3;maxItropt=500;trace=FALSE;reltol=10^(-4);optmethod="Nelder-Mead";save=T;traceCV=FALSE;pairing = c(1,2,3);
   # fixedseed=TRUE;fixedpen=NULL
+  
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
 
   if(fixedseed) set.seed(12345)
 
@@ -714,7 +751,8 @@ optLambdas <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL, fol
 }
 
 #WRAPPER FOR OPTIMIZING IN TWO STEP: 1 GLOBAL SEARCH, 2 LOCAL SEARCH
-optLambdasWrap <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL, folds, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model="logistic",
+optLambdasWrap <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL, folds, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", 
+                           model=NULL,
                            epsIWLS=1e-3,maxItrIWLS=25, traceCV=TRUE, reltol=1e-4, optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
                            maxItropt1=10,maxItropt2=25, save=FALSE, parallel=FALSE, pref=NULL,fixedpen=NULL){
 
@@ -723,6 +761,12 @@ optLambdasWrap <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL,
   # maxItropt1=10;maxItropt2=25; save=FALSE; parallel=FALSE;  pref=NULL;
   # penaltiesinit=lambdas; XXblocks=XXall;Y=resp;folds=leftout;score="loglik"; model="cox"; intercept=FALSE;
   # parallel=TRUE;
+  
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
 
   nbl <- length(XXblocks)
 
@@ -777,7 +821,7 @@ optLambdasWrap <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL,
 #####################################################################################################
 
 
-doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, infold=10, nrepeatout=1, nrepeatin=1, balance=TRUE, fixedfolds=TRUE, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model="logistic",
+doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, infold=10, nrepeatout=1, nrepeatin=1, balance=TRUE, fixedfolds=TRUE, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),frac1=NULL,score="loglik", model=NULL,
                      eps=1e-7,maxItr=10,trace=FALSE,printCV=TRUE,reltol=1e-4, optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
                      maxItropt1=10,maxItropt2=25, save=FALSE, parallel=FALSE, pref=NULL,fixedpen=NULL){
   #1. produce outfolds
@@ -788,6 +832,11 @@ doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, in
   # XXblocks <- XXblocksmm; response<-Y; X1=NULL;outfold=5;infold=10;nrepeatout=2; nrepeatin=1;balance=TRUE;fixedfolds=TRUE;
   # intercept=ifelse(class(Y)=="Surv", FALSE, TRUE); frac1=NULL;score="loglik"; model="logistic"; eps=1e-7;maxItr=100;trace=FALSE;printCV=TRUE;save=FALSE;parallel=F;
   #reltol=1e-4; optmethod=ifelse(length(XXblocks)==1,"Brent", "Nelder-Mead")
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+     model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
 
   response <- Y
   leftoutout <- CVfolds(Y=response,kfold=outfold,nrepeat=nrepeatout,fixedfolds=fixedfolds,balance=balance,model=model)
@@ -858,7 +907,8 @@ doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, in
     all_respout <- Surv(all_timeout,all_evout)
   }
   all_samout <- unlist(lapply(1:nf,function(i){out <- leftoutout[[i]];return(out)}))
-  res0 <- data.frame(sampleindex=all_samout,true=all_respout, linpred = all_lpsout)
+  whfold <- unlist(lapply(1:nf,function(i){out <- leftoutout[[i]];return(rep(i,length(out)))}))
+  res0 <- data.frame(sampleindex=all_samout,true=all_respout, linpred = all_lpsout, whfold=whfold)
   od <- order(all_samout)
   res <- res0[od,]
   # rn <- rownames(XXblocks[[1]])
@@ -905,7 +955,16 @@ doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, in
   P1W <- diag(n) - X1Wproj
   GammaW <- t(t(WsqrtV * XXT) * WsqrtV) #faster
   P1GammaW <- P1W %*% GammaW
-  invforH2 <- solve(diag(n) + P1GammaW)
+  #Mir: vanaf dit stukje
+  invforH2<-try(solve(diag(n) + P1GammaW))
+  if(class(invforH2)[1]=="try-error"){
+    svdXXT <- svd(diag(n) + P1GammaW)
+    svdd <- svdXXT$d
+    #reci <- 1/svdd[1:n]
+    reci <- c(1/svdd[1:n-1],0)
+    invforH2 <- svdXXT$v %*% (reci * t(svdXXT$u))
+  }
+  #Mir: tot hier
   #H2 <- Winvsqrt %*% GammaW %*% (diag(n) -invforH2 %*% P1GammaW) %*% P1W %*% Winvsqrt
   MW <- WsqrtV * t(t((diag(n) - invforH2 %*% P1GammaW) %*% P1W) * WinvsqrtV)
   H20 <- GammaW %*% (WinvsqrtV * MW)
@@ -978,18 +1037,26 @@ doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, in
 #####################################################################################################
 
 
-mgcv_lambda <- function(penalties, XXblocks,Y, model, printscore=TRUE){
-
-  #penalties=lambdas; XXblocks=XXomics;Y=respl; model="logistic"
-
+mgcv_lambda <- function(penalties, XXblocks,Y, model=NULL, printscore=TRUE, pairing=NULL, sigmasq = 1, 
+                        opt.sigma=ifelse(model=="linear",T, F)){
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+  #penalties=lambdas; XXblocks = XXbl;Y=resp; model="logistic";printscore=TRUE; intercept= TRUE
+  if(opt.sigma){ #Mir
+    sigmasq <- penalties[1]#Mir
+    penalties <- penalties[-1]#Mir
+  }#Mir
   if(model=="linear") fam <- "gaussian"
   if(model=="logistic") fam <- "binomial"
   if(model=="cox") fam <- "cox.ph"
-
-  XXT <- SigmaFromBlocks(XXblocks,penalties=penalties)
+  
+  XXT <- SigmaFromBlocks(XXblocks,penalties=penalties, pairing=pairing)
   n <- nrow(XXT)
   XXTi <- try(solve(XXT), silent=TRUE)
-  if(class(XXTi)[1]=="try-error"){ #rank of matrix might be n-1 due to scaling... take Moore-Penrose inverse
+  if(class(XXTi)=="try-error"){ #rank of matrix might be n-1 due to scaling... take Moore-Penrose inverse
     pmt <- proc.time()
     svdXXT <- svd(XXT)
     svdd <- svdXXT$d
@@ -1003,9 +1070,8 @@ mgcv_lambda <- function(penalties, XXblocks,Y, model, printscore=TRUE){
   PP = list(Xgam=list(XXTi,sp=1))
 
   #MML
-  pmt <- proc.time()
-  pred <- try(gam(Y ~ 0 + Xgam,family=fam, paraPen=PP,method="ML",scale=1))
-
+  pred <- try(gam(Y ~ 0 + Xgam,family=fam, paraPen=PP,method="ML",scale=sigmasq)) #no intercept
+    
   score <- pred$gcv.ubre
   if(printscore) {
     print(penalties)
@@ -1015,48 +1081,122 @@ mgcv_lambda <- function(penalties, XXblocks,Y, model, printscore=TRUE){
 }
 
 
-optLambdas_mgcv <- function(penaltiesinit=NULL, XXblocks,Y, model="logistic",
-                            reltol=1e-4, optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
-                            maxItropt=500,tracescore=TRUE,fixedseed =TRUE){
+optLambdas_mgcv <- function(penaltiesinit=NULL, XXblocks,Y, pairing=NULL,model=NULL, reltol=1e-4, optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
+                            maxItropt=500,tracescore=TRUE,fixedpen=NULL, fixedseed = TRUE, sigmasq = 1, 
+                            opt.sigma=ifelse(model=="linear",T, F)){
   #penaltiesinit=lambdas; Xblocks=Xomics;Y=resp; model="cox";reltol=1e-4; optmethod= "Nelder-Mead";maxItropt=20
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+  if(model!="linear") opt.sigma <- F
+  if(opt.sigma){#Mir
+    sigmainit <- sigmasq#Mir
+    penaltiesinit <- penaltiesinit#Mir
+  }#Mir
   response <- Y
   npen <- length(XXblocks)
+  
+  if(!is.null(fixedpen)) {
+    if(length(fixedpen) > (npen-1) | max(fixedpen) > npen){
+      message("ERROR: incorrect input for argument \'fixedpen\'")
+      return(NULL)
+    }
+  }
 
   if(fixedseed) set.seed(12345)
+  if(is.null(sigmasq)&model!="linear") sigmasq <- 1#Mir
 
 
-  if(is.null(penaltiesinit)) penaltiesinit <- rep(100,npen);
+  if(is.null(penaltiesinit)) {penaltiesinit <- rep(100,npen); if(!is.null(pairing)) {penpair <- pairing[3]; penaltiesinit[penpair] <- 25}
+  } else {if(!is.null(pairing)) {
+    if(length(penaltiesinit) < npen)
+    {
+      penaltiesinit <- c(penaltiesinit,paired=NA)
+      penpair1 <- pairing[1]; penpair2 <- pairing[2]; penpair3 <- pairing[3]
+      penaltiesinit[penpair3] <- sqrt(penaltiesinit[penpair1])*sqrt(penaltiesinit[penpair2])*0.25
+      penaltiesinit[penpair1] <- penaltiesinit[penpair1]*(1+.25)
+      penaltiesinit[penpair2] <- penaltiesinit[penpair2]*(1+.25)
+    }
+  }
+  }  #use smaller paired penalty by default
+  
   print("Initial penalties:")
   print(penaltiesinit)
   multinit = rep(1,length(penaltiesinit))
-
-
-  if(length(multinit) == 1 & optmethod != "SANN") optmethod <- "Brent"
-  print(paste("Using",optmethod,"for optimization"))
-
-  CVS <- function(logmults){
-    allpenalties <- exp(logmults)*penaltiesinit
-    res <- mgcv_lambda(allpenalties, XXblocks=XXblocks,Y=response, model=model,printscore=tracescore)
-    allscores_mgcv <<- c(allscores_mgcv,res)
-    return(res)
+  
+  if(!is.null(fixedpen)){
+    multinit <- multinit[-fixedpen]
   }
 
-  allscores_mgcv <<- c()  #saves all evaluations
+  if((length(multinit)+opt.sigma) == 1 & optmethod != "SANN") optmethod <- "Brent"  #Mir print(paste("Using",optmethod,"for optimization"))
+  print(paste("Using",optmethod,"for optimization"))
+  
 
-  if(optmethod != "Brent") optres <- optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method=optmethod) else
-    optres <- try(optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method=optmethod,lower=-10,upper=10))
-  if(class(optres)=="try-error") optres <- optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method="Nelder-Mead")
-  if(!is.null(ncol(allscores_mgcv))) colnames(allscores_mgcv) <- c("Score", paste("pen",1:npen,sep=""))
-
-  optpen <- as.numeric(exp(optres$par))*penaltiesinit
-
-  optres2 <- c(optres,optpen=list(optpen),allsc = list(allscores_mgcv))
-  return(optres2)
+  if(opt.sigma){
+    CVS <- function(logmults){
+      # sigmasq <- logmults[1]
+      # logmults <- logmults[-1]
+      allpenalties <- rep(NA,length(penaltiesinit))
+      if(!is.null(fixedpen)) {
+        allpenalties[fixedpen] <- penaltiesinit[fixedpen]
+        allpenalties[-fixedpen] <- exp(logmults[-1])*penaltiesinit[-fixedpen]
+        allpenalties <-c(exp(logmults[1]), allpenalties) #add sigma
+      } else allpenalties <-  c(exp(logmults[1]),exp(logmults[-1])*penaltiesinit)
+      
+       res <- mgcv_lambda(allpenalties, XXblocks=XXblocks,Y=response, 
+                         model=model,printscore=tracescore,opt.sigma=T)
+      allscores_mgcv <<- c(allscores_mgcv,res)
+      return(res)
+    }
+    
+    allscores_mgcv <<- c()  #saves all evaluations
+    
+    if(optmethod != "Brent"){
+      optres <- optim(par = c(log(sigmainit),log(multinit)), CVS, control=list(reltol=reltol,maxit=maxItropt), method=optmethod)
+    }else{
+      optres <- try(optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method=optmethod,lower=-10,upper=10))
+    }
+    
+    if(class(optres)=="try-error") optres <- optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method="Nelder-Mead")
+    if(!is.null(ncol(allscores_mgcv))) colnames(allscores_mgcv) <- c("Score", paste("pen",1:npen,sep=""))
+    
+    optpen <- c(as.numeric(exp(optres$par[1])),as.numeric(exp(optres$par[-1]))*penaltiesinit)
+    
+    optres2 <- c(optres,optpen=list(optpen),allsc = list(allscores_mgcv))
+    return(optres2)
+  } else{#Mir: tot hier, in deze else loop staat wat het anders was geweest
+    CVS <- function(logmults){
+      allpenalties <- rep(NA,length(penaltiesinit))
+      if(!is.null(fixedpen)) {
+        allpenalties[fixedpen] <- penaltiesinit[fixedpen]
+        allpenalties[-fixedpen] <- c(exp(logmults[1]),exp(logmults[-1])*penaltiesinit[-fixedpen])
+      } else allpenalties <- exp(logmults)*penaltiesinit
+      res <- mgcv_lambda(allpenalties, XXblocks=XXblocks,Y=response, 
+                         model=model,printscore=tracescore,sigmasq=sigmasq)
+      allscores_mgcv <<- c(allscores_mgcv,res)
+      return(res)
+    }
+    
+    allscores_mgcv <<- c()  #saves all evaluations
+    
+    if(optmethod != "Brent") optres <- optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method=optmethod) else
+      optres <- try(optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method=optmethod,lower=-10,upper=10))
+    if(class(optres)=="try-error") optres <- optim(par = log(multinit), CVS, control=list(reltol=reltol,maxit=maxItropt), method="Nelder-Mead")
+    if(!is.null(ncol(allscores_mgcv))) colnames(allscores_mgcv) <- c("Score", paste("pen",1:npen,sep=""))
+    
+    optpen <- as.numeric(exp(optres$par))*penaltiesinit
+    
+    optres2 <- c(optres,optpen=list(optpen),allsc = list(allscores_mgcv))
+    return(optres2)
+  }
 }
 
-optLambdas_mgcvWrap <- function(penaltiesinit=NULL, XXblocks,Y, model="logistic",
+optLambdas_mgcvWrap <- function(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, 
                                 reltol=1e-4, optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
-                                maxItropt1=10,maxItropt2=25,tracescore=TRUE,fixedseed=TRUE ){
+                                maxItropt1=10,maxItropt2=25,tracescore=TRUE,fixedseed=TRUE, pref=NULL,fixedpen=NULL, sigmasq = 1, 
+                                opt.sigma=ifelse(model=="linear",T, F)){
 
   # penaltiesinit=NULL; X1=NULL; pairing=NULL; folds; intercept=TRUE;frac1=NULL;score="loglik"; model="logistic";
   # epsIWLS=1e-3;maxItrIWLS=25; traceCV=TRUE; reltol=1e-4; optmethod1= "SANN"; optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead");
@@ -1065,30 +1205,97 @@ optLambdas_mgcvWrap <- function(penaltiesinit=NULL, XXblocks,Y, model="logistic"
   # parallel=TRUE;warmstart=FALSE
 
   #penaltiesinit=lambdas; Xblocks=Xomics;Y=resp; model="cox";reltol=1e-4; optmethod1= "SANN";maxItropt1=10;optmethod2= "Nelder-Mead";maxItropt2=25
-
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+  if(model!="linear") opt.sigma <- F#Mir
+  if(opt.sigma){#Mir
+    sigmainit <- sigmasq#Mir
+    penaltiesinit <- penaltiesinit#Mir
+  }#Mir
+  if(is.null(sigmasq)&model!="linear") sigmasq <- 1#Mir
+  
   nbl <- length(XXblocks)
 
-  peni <- penaltiesinit
+  if(is.null(pref)){prefer <- 1:nbl; peni <- penaltiesinit} else {prefer <- pref; peni<- penaltiesinit[prefer]}
 
-  jl0 <- try(optLambdas_mgcv(penaltiesinit=peni, XXblocks=XXblocks,Y=Y, model=model,
-                             reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,tracescore=tracescore,fixedseed=fixedseed ))
+  jl0 <- try(optLambdas_mgcv(penaltiesinit=peni, XXblocks=XXblocks[prefer],Y=Y, pairing=pairing, model=model, 
+                             reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,tracescore=tracescore,
+                             fixedseed=fixedseed, fixedpen=fixedpen,sigmasq=sigmasq,opt.sigma=opt.sigma ))
 
-  if(class(jl0) != "try-error") lambdas0 <- jl0$optpen else lambdas0 <- peni
+  if(class(jl0) != "try-error"){
+    if(opt.sigma){#Mir
+      lambdas0 <- jl0$optpen[-1]#Mir
+      sigma0 <- jl0$optpen[1]#Mir
+    }else{#Mir
+      lambdas0 <- jl0$optpen
+      sigma0 <- sigmasq
+    }#Mir
+  }else lambdas0 <- peni
 
-  jl1 <- optLambdas_mgcv(penaltiesinit=lambdas0, XXblocks=XXblocks,Y=Y, model=model,
-                         reltol=reltol,optmethod=optmethod2,maxItropt=maxItropt2,tracescore=tracescore,fixedseed=fixedseed )
+  jl1 <- optLambdas_mgcv(penaltiesinit=lambdas0, XXblocks=XXblocks[prefer],Y=Y, pairing=pairing, model=model, 
+                         reltol=reltol,optmethod=optmethod2,maxItropt=maxItropt2,tracescore=tracescore,
+                         fixedseed=fixedseed, fixedpen=fixedpen,sigmasq=sigma0,opt.sigma=opt.sigma )
 
   lambdas1 <- jl1$optpen
-
-  res <- c(res0=list(jl0),res1=list(jl1))
-  lambdas <- c(list(lambdas0),list(lambdas1))
-
-  return(list(res=res,lambdas=lambdas,optpen = lambdas1))
+  
+  if(opt.sigma){#Mir
+    lambdas1 <- jl1$optpen[-1]#Mir
+    sigma1 <- jl1$optpen[1]#Mir
+    }else{#Mir
+    lambdas1 <- jl1$optpen
+    sigma1 <- sigmasq
+    }#Mir
+    res <- c(res0=list(jl0),res1=list(jl1))
+    lambdas <- c(list(lambdas0),list(lambdas1))
+    sigmas <- c(sigma0,sigma1)
+  
+  if(is.null(pref)) {
+    return(list(res=res,lambdas=lambdas,optpen = lambdas1,sigmas=sigmas))
+  } else {
+    pref <- c(fixedpen,pref)
+    lambdasall <- rep(NA,nbl)
+    lambdasall[pref] <- lambdas1
+    lambdasall[-pref] <- penaltiesinit[-pref]
+    jl2 <- try(optLambdas_mgcv(penaltiesinit=lambdasall, XXblocks=XXblocks,Y=Y, pairing=pairing, model=model, 
+                               reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,tracescore=tracescore,
+                               fixedseed=fixedseed, fixedpen=pref,sigmasq=sigmasq,opt.sigma=opt.sigma  ) )
+    
+    if(class(jl2) != "try-error"){
+      if(opt.sigma){#Mir
+        lambdas2 <- jl2$optpen[-1]#Mir
+        sigma02 <- jl2$optpen[1]#Mir
+      }else{#Mir
+        lambdas2 <- jl2$optpen
+        sigma02 <- sigmasq
+      }#Mir
+    }else lambdas2 <- lambdasall
+    
+    
+    jl3 <- optLambdas_mgcv(penaltiesinit=lambdas2, XXblocks=XXblocks,Y=Y, pairing=pairing, model=model, 
+                    reltol=reltol,optmethod=optmethod2,maxItropt=maxItropt2,tracescore=tracescore,
+                    fixedseed=fixedseed, fixedpen=pref,sigmasq=sigma02,opt.sigma=opt.sigma )
+    
+    if(opt.sigma){#Mir
+      lambdas3 <- jl3$optpen[-1]#Mir
+      sigma3 <- jl3$optpen[1]#Mir
+     }else{#Mir
+      lambdas3 <- jl3$optpen
+      sigma3 <- sigmasq
+    }#Mir
+    res <- c(res,res2=list(jl2),res3=list(jl3))
+    lambdas <- c(lambdas,list(lambdas2),list(lambdas3))
+    sigmas <- c(sigmas,sigma02,sigma3)
+    return(list(res=res,lambdas=lambdas,optpen = lambdas3,sigmas=sigmas))
+  }
 }
 
-mlikCV <- function(penaltiesinit,XXblocks,Y,outfold=5, infold=10, nrepeatout=1,balance=TRUE, fixedfolds=TRUE, model="logistic",
+mlikCV <- function(penaltiesinit,XXblocks,Y,pairing=NULL, outfold=5, nrepeatout=1,balance=TRUE, fixedfolds=TRUE, model=NULL, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),
                     reltol=1e-4, trace=FALSE, optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
-                     maxItropt1=10,maxItropt2=25,parallel=FALSE){
+                     maxItropt1=10,maxItropt2=25,parallel=FALSE, pref=NULL,fixedpen=NULL, sigmasq = 1, 
+                   opt.sigma=ifelse(model=="linear",T, F)){
   #1. produce outfolds
   #2. subset XXblocks and response
   #3. opt lambda per out-fold
@@ -1097,7 +1304,11 @@ mlikCV <- function(penaltiesinit,XXblocks,Y,outfold=5, infold=10, nrepeatout=1,b
   # XXblocks <- XXblocksmm; response<-Y; X1=NULL;outfold=5;infold=10;nrepeatout=2; nrepeatin=1;balance=TRUE;fixedfolds=TRUE;
   # intercept=ifelse(class(Y)=="Surv", FALSE, TRUE); frac1=NULL;score="loglik"; model="logistic"; eps=1e-7;maxItr=100;trace=FALSE;printCV=TRUE;save=FALSE;parallel=F;
   #reltol=1e-4; optmethod=ifelse(length(XXblocks)==1,"Brent", "Nelder-Mead")
-
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
   response <- Y
   leftoutout <- CVfolds(Y=response,kfold=outfold,nrepeat=nrepeatout,fixedfolds=fixedfolds,balance=balance,model=model)
   n <- length(response)
@@ -1139,15 +1350,24 @@ mlikCV <- function(penaltiesinit,XXblocks,Y,outfold=5, infold=10, nrepeatout=1,b
     # } else
     #penaltiesinit <- c(4,5,6); pairing=c(1,2)
     penaltiesi <- penaltiesinit
-    optlam <- optLambdas_mgcvWrap(penaltiesinit=penaltiesi, XXblocks=XXblocksin,Y=respin,
-                                                              model=model, tracescore=trace, reltol=reltol,optmethod1=optmethod1,optmethod2=optmethod2, maxItropt1=maxItropt1, maxItropt2=maxItropt2)$optpen
+    if(!is.null(pairing)) {
+      penaltiesi <- penaltiesinit
+      penaltiesi <- c(penaltiesi, sqrt(penaltiesi[pairing[1]])*sqrt(penaltiesi[pairing[2]])/4)
+      penaltiesi[pairing] <-  penaltiesi[pairing]*(1+1/4)
+    } else penaltiesi <- penaltiesinit
+    
+    optlam <- optLambdas_mgcvWrap(penaltiesinit=penaltiesi, XXblocks=XXblocksin,Y=respin,pairing=pairing,
+                                                              model=model, tracescore=trace, reltol=reltol,
+                                  optmethod1=optmethod1,optmethod2=optmethod2, maxItropt1=maxItropt1, 
+                                  maxItropt2=maxItropt2,pref=pref,fixedpen=fixedpen, sigmasq = sigmasq, 
+                                  opt.sigma=opt.sigma)$optpen
     print("Opt penalties:");print(optlam)
 
-    SigmaLambda <- SigmaFromBlocks(XXblocks,optlam)
+    SigmaLambda <- SigmaFromBlocks(XXblocks,optlam, pairing=pairing)
     SigmaIn <- SigmaLambda[ins,ins] #Sigma matrix allows subsetting; SigmaIn is required for fitting
     SigmaOutIn <- SigmaLambda[outs,ins] #SigmaOutIn is required for prediction
-    if(model=="logistic") fitin <- try(IWLSridge(SigmaIn,respin,X1=NULL,intercept=FALSE,trace=FALSE))
-    if(model=="cox") fitin <- try(IWLSCoxridge(SigmaIn,respin,X1=NULL,intercept=FALSE,trace=FALSE))
+    if(model=="logistic") fitin <- try(IWLSridge(SigmaIn,respin,X1=NULL,intercept=intercept,trace=FALSE))
+    if(model=="cox") fitin <- try(IWLSCoxridge(SigmaIn,respin,X1=NULL,intercept=intercept,trace=FALSE))
     if(class(fitin) =="try-error") lpsout <- rep(0,length(respout)) else lpsout <- predictIWLS(fitin, X1new=NULL,SigmaOutIn)
     return(lpsout)
   }
@@ -1161,7 +1381,8 @@ mlikCV <- function(penaltiesinit,XXblocks,Y,outfold=5, infold=10, nrepeatout=1,b
     all_respout <- Surv(all_timeout,all_evout)
   }
   all_samout <- unlist(lapply(1:nf,function(i){out <- leftoutout[[i]];return(out)}))
-  res0 <- data.frame(sampleindex=all_samout,true=all_respout, linpred = all_lpsout)
+  whfold <- unlist(lapply(1:nf,function(i){out <- leftoutout[[i]];return(rep(i,length(out)))}))
+  res0 <- data.frame(sampleindex=all_samout,true=all_respout, linpred = all_lpsout, whfold=whfold)
   od <- order(all_samout)
   res <- res0[od,]
   # rn <- rownames(XXblocks[[1]])
