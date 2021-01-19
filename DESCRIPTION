@@ -1,8 +1,8 @@
 Package: multiridge
 Type: Package
 Title: Fast cross-validation for multi-penalty ridge regression
-Version: 1.1
-Date: 2020-04-28
+Version: 1.2
+Date: 2021-01-19
 Author: Mark A. van de Wiel
 Maintainer: Mark A. van de Wiel <mark.vdwiel@amsterdamumc.nl>
 Depends: R (>= 3.4.0), penalized, survival, pROC, risksetROC, mgcv
