@@ -775,7 +775,8 @@ optLambdasWrap <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL,
 
   nbl <- length(XXblocks)
 
-  if(is.null(pref)){prefer <- 1:nbl; peni <- penaltiesinit} else {prefer <- pref; peni<- penaltiesinit[prefer]}
+  if(is.null(pref)){prefer <- 1:nbl; peni <- penaltiesinit} else {prefer <- pref;
+  if(is.null(penaltiesinit)) peni<-NULL else peni <- penaltiesinit[prefer]}
 
   jl0 <- try(optLambdas(penaltiesinit=peni, XXblocks=XXblocks[prefer],Y=Y,X1=X1, pairing=pairing, folds=folds, intercept=intercept,frac1=frac1,score=score, model=model,
                         epsIWLS=epsIWLS,maxItrIWLS=maxItrIWLS, traceCV=traceCV, reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,
@@ -797,7 +798,7 @@ optLambdasWrap <- function(penaltiesinit=NULL, XXblocks,Y,X1=NULL, pairing=NULL,
     pref <- c(fixedpen,pref)
     lambdasall <- rep(NA,nbl)
     lambdasall[pref] <- lambdas1
-    lambdasall[-pref] <- penaltiesinit[-pref]
+    if(!is.null(penaltiesinit)) lambdasall[-pref] <- penaltiesinit[-pref] else lambdasall[-pref] <- 100
     jl2 <- try(optLambdas(penaltiesinit=lambdasall, XXblocks=XXblocks,Y=Y,X1=X1, pairing=pairing, folds=folds, intercept=intercept,frac1=frac1,score=score, model=model,
                           epsIWLS=epsIWLS,maxItrIWLS=maxItrIWLS, traceCV=traceCV, reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,
                           save=save, parallel=parallel,fixedpen= pref ))
@@ -1061,7 +1062,7 @@ mgcv_lambda <- function(penalties, XXblocks,Y, model=NULL, printscore=TRUE, pair
   XXT <- SigmaFromBlocks(XXblocks,penalties=penalties, pairing=pairing)
   n <- nrow(XXT)
   XXTi <- try(solve(XXT), silent=TRUE)
-  if(class(XXTi)=="try-error"){ #rank of matrix might be n-1 due to scaling... take Moore-Penrose inverse
+  if(class(XXTi)[1]=="try-error"){ #rank of matrix might be n-1 due to scaling... take Moore-Penrose inverse
     pmt <- proc.time()
     svdXXT <- svd(XXT)
     svdd <- svdXXT$d
@@ -1224,7 +1225,8 @@ optLambdas_mgcvWrap <- function(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, mo
 
   nbl <- length(XXblocks)
 
-  if(is.null(pref)){prefer <- 1:nbl; peni <- penaltiesinit} else {prefer <- pref; peni<- penaltiesinit[prefer]}
+  if(is.null(pref)){prefer <- 1:nbl; peni <- penaltiesinit} else {prefer <- pref;
+  if(is.null(penaltiesinit)) peni<-NULL else peni <- penaltiesinit[prefer]}
 
   jl0 <- try(optLambdas_mgcv(penaltiesinit=peni, XXblocks=XXblocks[prefer],Y=Y, pairing=pairing, model=model,
                              reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,tracescore=tracescore,
@@ -1263,7 +1265,7 @@ optLambdas_mgcvWrap <- function(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, mo
     pref <- c(fixedpen,pref)
     lambdasall <- rep(NA,nbl)
     lambdasall[pref] <- lambdas1
-    lambdasall[-pref] <- penaltiesinit[-pref]
+    if(!is.null(penaltiesinit)) lambdasall[-pref] <- penaltiesinit[-pref] else lambdasall[-pref] <- 100
     jl2 <- try(optLambdas_mgcv(penaltiesinit=lambdasall, XXblocks=XXblocks,Y=Y, pairing=pairing, model=model,
                                reltol=reltol,optmethod=optmethod1,maxItropt=maxItropt1,tracescore=tracescore,
                                fixedseed=fixedseed, fixedpen=pref,sigmasq=sigmasq,opt.sigma=opt.sigma  ) )
@@ -1297,7 +1299,8 @@ optLambdas_mgcvWrap <- function(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, mo
   }
 }
 
-mlikCV <- function(penaltiesinit,XXblocks,Y,pairing=NULL, outfold=5, nrepeatout=1,balance=TRUE, fixedfolds=TRUE, model=NULL, intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),
+mlikCV <- function(penaltiesinit,XXblocks,Y,pairing=NULL, outfold=5, nrepeatout=1,balance=TRUE, fixedfolds=TRUE, model=NULL,
+                   intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),
                     reltol=1e-4, trace=FALSE, optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
                      maxItropt1=10,maxItropt2=25,parallel=FALSE, pref=NULL,fixedpen=NULL, sigmasq = 1,
                    opt.sigma=ifelse(model=="linear",T, F)){
