@@ -9,7 +9,8 @@ Iterative weighted least squares algorithm for linear and logistic ridge regress
 Iterative weighted least squares algorithm for linear and logistic ridge regression. Updates the weights and linear predictors until convergence.
 }
 \usage{
-IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07, maxItr = 25, trace = FALSE, model = NULL, E0 = NULL)
+IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07, maxItr = 25, trace = FALSE,
+  model = NULL, E0 = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

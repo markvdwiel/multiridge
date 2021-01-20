@@ -8,7 +8,10 @@ Find optimal ridge penalties with sequential optimization.
 Sequentially optimizes a marginal likelihood score w.r.t. ridge penalties for multiple data blocks.
 }
 \usage{
-optLambdas_mgcvWrap(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4, optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"), maxItropt1=10,maxItropt2=25,tracescore=TRUE,fixedseed =TRUE,sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
+optLambdas_mgcvWrap(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4,
+  optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
+  maxItropt1=10,maxItropt2=25,tracescore=TRUE,fixedseed =TRUE, pref=NULL, fixedpen=NULL,
+  sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -46,13 +49,20 @@ Integer. Maximum number of iterations for \code{optmethod1}.
   \item{maxItropt2}{
 Integer. Maximum number of iterations for \code{optmethod2}.
 }
+ \item{tracescore}{
+Boolean. Should the output of the scores be traced?
+}
   \item{fixedseed}{
 Boolean. Should the initialization be fixed? For reproducibility.
 }
-  \item{tracescore}{
-Boolean. Should the output of the scores be traced?
+  \item{pref}{
+Integer vector or \code{NULL}. Contains indices of data types in \code{XXblocks}
+that are preferential.
 }
-
+\item{fixedpen}{
+Integer vector or \code{NULL}. Contains indices of data types of which penalty
+is fixed to the corresponding value in \code{penaltiesinit}.
+}
 \item{sigmasq}{Default error variance.
 }
 

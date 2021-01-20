@@ -8,7 +8,7 @@ Creates (repeated) cross-validation folds
 Creates (repeated) cross-validation folds for samples
 }
 \usage{
-CVfolds(Y, model = "logistic", balance = TRUE, kfold = 10, fixedfolds = TRUE, nrepeat = 1)
+CVfolds(Y, model = NULL, balance = TRUE, kfold = 10, fixedfolds = TRUE, nrepeat = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,7 +16,8 @@ CVfolds(Y, model = "logistic", balance = TRUE, kfold = 10, fixedfolds = TRUE, nr
 Response vector: numeric, binary, factor or \code{survival}.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{balance}{
 Boolean. Should the splits be balanced in terms of response labels?
@@ -32,7 +33,7 @@ Numeric. Number of repeats.
 }
 }
 \details{
-Creates (repeated), possibly balanced,  splits of the samples. Computing time will often largely depend on 
+Creates (repeated), possibly balanced,  splits of the samples. Computing time will often largely depend on
 on \code{kfold*nrepeat}, the number of training-test splits evaluated.
 }
 \value{

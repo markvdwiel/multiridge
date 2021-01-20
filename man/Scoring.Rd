@@ -9,7 +9,7 @@ Evaluates predictions by a score suitable for the corresponding response
 }
 \usage{
 Scoring(lp, Y, model = NULL, score = ifelse(model == "linear", "mse", "loglik"),
-print = TRUE)
+  print = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

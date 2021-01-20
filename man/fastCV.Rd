@@ -8,7 +8,7 @@ Fast, SVD-based cross-validation per data block
 Fast, SVD-based cross-validation for high-dimensional data. Finds optimal penalties separately per data block. Useful for initialization.
 }
 \usage{
-fastCV(Xblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), parallel = FALSE, fixedfolds = TRUE, model = NULL, eps = 1e-10)
+fastCV(Xblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), parallel   = FALSE, fixedfolds = TRUE, model = NULL, eps = 1e-10, lambdamax= 10^6)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,6 +40,11 @@ Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
   \item{eps}{
 Scalar. Numerical bound for IWLS convergence.
 }
+
+ \item{lambdamax}{
+Numeric. Upperbound for lambda.
+}
+
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

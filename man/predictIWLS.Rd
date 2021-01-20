@@ -52,8 +52,7 @@ estimates.
 \code{\link{Scoring}} to evaluate the predictions.
 }
 \examples{
-#Example below shows how to create the input argument Sigmanew (for simulated
-data)
+#Example below shows how to create the input argument Sigmanew (for simulated data)
 #Simulate
 Xbl1 <- matrix(rnorm(1000),nrow=10)
 Xbl2 <- matrix(rnorm(2000),nrow=10)

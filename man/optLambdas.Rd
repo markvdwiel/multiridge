@@ -8,7 +8,11 @@ Find optimal ridge penalties.
 Optimizes a cross-validated score w.r.t. ridge penalties for multiple data blocks.
 }
 \usage{
-optLambdas(penaltiesinit = NULL, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik", model = "logistic", epsIWLS = 0.001, maxItrIWLS = 25, traceCV = TRUE, reltol = 1e-04, optmethod = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt = 500, save = FALSE, parallel = FALSE, fixedpen = NULL, fixedseed = TRUE)
+optLambdas(penaltiesinit = NULL, XXblocks, Y, X1 = NULL, pairing = NULL, folds,
+  intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), frac1 = NULL, score = "loglik",
+  model = NULL, epsIWLS = 0.001, maxItrIWLS = 25, traceCV = TRUE, reltol = 1e-04,
+  optmethod = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt = 500,
+  save = FALSE, parallel = FALSE, fixedpen = NULL, fixedseed = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,7 +44,8 @@ Scalar. Prior fraction of cases. Only relevant for \code{model=" logistic"}.
 Character. See Details.
 }
   \item{model}{
-Character. Any of \code{c("linear", "logistic", "cox")}.
+Character. Any of \code{c("linear", "logistic", "cox")}. Is inferred from
+\code{Y} when \code{NULL}.
 }
   \item{epsIWLS}{
 Scalar. Numerical bound for IWLS convergence.

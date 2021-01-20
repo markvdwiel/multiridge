@@ -9,7 +9,7 @@ Computed maximum marginal likelihood score for given penalty parameters using \c
 }
 \usage{
 mgcv_lambda(penalties, XXblocks,Y, model=NULL, printscore=TRUE, pairing=NULL, sigmasq = 1,
-                        opt.sigma=ifelse(model=="linear",T, F))
+  opt.sigma=ifelse(model=="linear",T, F))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

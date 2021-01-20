@@ -8,7 +8,10 @@ Find optimal ridge penalties with maximimum marginal likelihood
 Optimizes a marginal likelihood score w.r.t. ridge penalties for multiple data blocks.
 }
 \usage{
-optLambdas_mgcv(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4, optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"), maxItropt=500,tracescore=TRUE,fixedseed =TRUE, sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
+optLambdas_mgcv(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4,
+  optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),maxItropt=500,
+  tracescore=TRUE, fixedpen=NULL, fixedseed =TRUE, sigmasq = 1,
+  opt.sigma=ifelse(model=="linear",T, F))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,6 +44,10 @@ Integer. Maximum number of iterations for \code{optmethod}.
 }
   \item{tracescore}{
 Boolean. Should the output of the scores be traced?
+}
+\item{fixedpen}{
+Integer vector or \code{NULL}. Contains indices of data types of which penalty
+is fixed to the corresponding value in \code{penaltiesinit}.
 }
   \item{fixedseed}{
 Boolean. Should the initialization be fixed? For reproducibility.

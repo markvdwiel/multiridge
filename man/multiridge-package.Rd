@@ -21,6 +21,7 @@ The DESCRIPTION file:
 \code{\link{fastCV}}: Fast cross-validation per data block\cr
 \code{\link{IWLSCoxridge}}: Iterative weighted least squares algorithm for Cox ridge regression \cr
 \code{\link{IWLSridge}}: Iterative weighted least squares algorithm for linear and logistic ridge regression \cr
+\code{\link{mlikCV}}:  Cross-validation for estimating performance of marginal likelihood estimation\cr
 \code{\link{optLambdasWrap}}: Find optimal ridge penalties by cross-validation  \cr
 \code{\link{optLambdas_mgcvWrap}}: Find optimal ridge penalties in terms of marginal likelihood  \cr
 \code{\link{predictIWLS}}: Predictions from ridge fits \cr
@@ -32,7 +33,7 @@ The DESCRIPTION file:
 Mark A. van de Wiel (mark.vdwiel@amsterdamumc.nl)
 }
 \references{
-Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2020). Fast CV for multi-omics ridge regression.
+Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2020). Fast cross-validation for high-dimensional ridge regression.
 }
 \keyword{ package }
 \seealso{A full demo and data are available from:
