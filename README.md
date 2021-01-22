@@ -5,7 +5,7 @@ library(devtools);
 install_github("markvdwiel/multiridge")
 
 You may also also install multiridge by downloading the .zip or tar.gz file, and use in R (with correct file name):
-install.packages(filename, repos=NULL); install.packages(c("penalized", "pROC", "risksetAUC"))
+install.packages(filename, repos=NULL); install.packages(c("penalized", "pROC", "risksetROC", "survival", "mgcv"))
 
 Demo script and data available from: https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4
 
