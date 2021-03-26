@@ -19,9 +19,9 @@ Integer vector of size 2 (or \code{NULL})
 }
 }
 \details{
-Only use this function when you wish to pair two data blocks. If \code{which2pair = NULL} the output 
-matches the input. If not, the function adds a paired data block, pairing the two data blocks corresponding to the elements of 
-\code{which2pair}. 
+Only use this function when you wish to pair two data blocks. If \code{which2pair = NULL} the output
+matches the input. If not, the function adds a paired data block, pairing the two data blocks corresponding to the elements of
+\code{which2pair}.
 }
 \value{
 List. Same as \code{datablocks} when \code{which2pair = NULL}, or augmented with one paired data block.
@@ -42,7 +42,4 @@ List. Same as \code{datablocks} when \code{which2pair = NULL}, or augmented with
 \code{\link{createXXblocks}}
 }
 
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

@@ -12,7 +12,7 @@ fastCV2(XXblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) == "Surv
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
- \item{Xblocks}{
+ \item{XXblocks}{
 List of data frames or matrices, representing \code{b=1,...,B} data blocks of dimensions \code{n x p_b}.
 }
 \item{Y}{
@@ -48,7 +48,7 @@ Numeric. Upperbound for lambda.
 }
 \details{
 This function is basically a wrapper for applying \code{\link{optLambdas}} per data block separately using Brent optimization.
-Unlike \code{\link{fastCV}} it does not require loading the (orphaned) penalized package. 
+Unlike \code{\link{fastCV}} it does not require loading the (orphaned) penalized package.
 }
 \value{
 Numerical vector containing penalties optimized separately per data block. Useful for initialization.
