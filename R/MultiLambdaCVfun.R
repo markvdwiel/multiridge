@@ -28,11 +28,14 @@ setupParallel <- function(ncpus=1, sourcefile=NULL,sourcelibraries=c("multiridge
 #Fast single lambda CV, based on SVD. Uses optL2 from penalized package, which uses identical IWLS algorithm as below
 fastCV <- function(Xblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),parallel=FALSE,fixedfolds = TRUE,
                    model=NULL, eps=1e-10, lambdamax = 10^6){
-  # Xblocks <- list(X1=matrix(rnorm(20000),nrow=100),X2=matrix(rnorm(20000),nrow=100));Y <- rbinom(100,size=1,prob=0.5);X1=NULL;intercept=FALSE;model="linear";kfold=10
-  #Xblocks[[1]]<-t(t(Xblocks[[1]])-apply(Xblocks[[1]],2,mean)); Xblocks[[2]]<-t(t(Xblocks[[2]])-apply(Xblocks[[2]],2,mean))
-  # parallel=FALSE;fixedfolds = TRUE;eps=eps=1e-10
-  #Xblocks<- Xbl; Y<- surv;X1<- NULL; kfold=10;intercept=ifelse(class(Y)=="Surv", FALSE, TRUE);parallel=FALSE;fixedfolds = TRUE
-  #Xblocks <- Xomics;Y=resp;X1<-NULL; kfold=5;fixedfolds = TRUE; intercept=TRUE; parallel=FALSE; fixedfolds = TRUE; model<- NULL; eps=1e-10; lambdamax <- 10^6
+
+  loadedpack <- (.packages())
+  if(!is.element("penalized",loadedpack)){
+    print("Error: package 'penalized' is required for this function")
+    return(NULL)
+  }
+
+
   if(is.null(model)){
     if(class(Y)=="Surv") model <- "cox" else {
       model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
@@ -87,6 +90,49 @@ fastCV <- function(Xblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv",
   names(lamol1s) <- c("lambdas",paste("penalizedCVres",1:nbl,sep=""))
   return(lamol1s)
 }
+
+#fast CV that does not depend on penalized package
+fastCV2 <- function(XXblocks,Y,X1=NULL,kfold=10,intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),parallel=FALSE,fixedfolds = TRUE,
+                    model=NULL, eps=1e-10, lambdamax = 10^6){
+  if(is.null(model)){
+    if(class(Y)=="Surv") model <- "cox" else {
+      model <- ifelse(length(unique(Y)) ==2, "logistic","linear")
+    }
+  }
+
+  if(parallel & !exists("runsetup")) {
+    message("ERROR: For parallel computing, please run setupParallel() function first")
+    #message("Use sourcelibraries=c(\"penalized\")")
+    return(NULL)
+  }
+  if(class(Y) == "Surv" & model != "cox") {
+    print("Response is of class survival. Switching to model=\'survival\' ")
+    model <- "cox"
+  }
+  leftout <- CVfolds(Y=Y,model=model, kfold=kfold,nrepeat=1, fixedfolds=fixedfolds)
+  #fold <- leftout
+  fastCVX2 <- function(XX){
+    #X <- Xblocks[[1]]
+    #if(class(kfold) == "list") {
+    #converts leftout represented as list to fold represented as vector (as required by optL2() function)
+    XXbl <- list(XX)
+    ol1 <- try(optLambdas(XXblocks=XXbl, Y=Y, X1=X1, folds=leftout, intercept=intercept, model=model),silent = T)
+    if(class(ol1) == "try-error") ol1 <- list(lambda=lambdamax)
+    return(ol1)
+  }
+
+  if(!parallel) ol1s <- lapply(XXblocks,fastCVX2) else {
+    sfExport("Y","X1","kfold","intercept")
+    ol1s <- sfLapply(XXblocks,fastCVX2)
+  }
+  lambdas0 <- unlist(lapply(ol1s,getElement,name="optpen"))
+  lambdas <- sapply(lambdas0,function(x) min(x,lambdamax))
+  lamol1s = c(list(lambdas),ol1s)
+  nbl <- length(XXblocks)
+  names(lamol1s) <- c("lambdas",paste("CVres",1:nbl,sep=""))
+  return(lamol1s)
+}
+
 
 #####################################################################################################
 #
