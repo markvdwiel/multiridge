@@ -18,7 +18,8 @@ The DESCRIPTION file:
 \code{\link{createXXblocks}}: Creates list of (unscaled) sample covariance matrices \cr
 \code{\link{CVscore}}: Cross-validated score for given penalty parameters \cr
 \code{\link{doubleCV}}:  Double cross-validation for estimating performance \cr
-\code{\link{fastCV}}: Fast cross-validation per data block\cr
+\code{\link{fastCV}}: Fast, SVD-based cross-validation per data block; based on \code{penalized} package\cr
+\code{\link{fastCV2}}: Fast cross-validation per data block; no dependency\cr
 \code{\link{IWLSCoxridge}}: Iterative weighted least squares algorithm for Cox ridge regression \cr
 \code{\link{IWLSridge}}: Iterative weighted least squares algorithm for linear and logistic ridge regression \cr
 \code{\link{mlikCV}}:  Cross-validation for estimating performance of marginal likelihood estimation\cr
@@ -33,7 +34,7 @@ The DESCRIPTION file:
 Mark A. van de Wiel (mark.vdwiel@amsterdamumc.nl)
 }
 \references{
-Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2020). Fast cross-validation for high-dimensional ridge regression.
+Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-validation for high-dimensional ridge regression. J Comp Graph Stat
 }
 \keyword{ package }
 \seealso{A full demo and data are available from:

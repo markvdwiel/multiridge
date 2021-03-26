@@ -55,7 +55,7 @@ List, containing:
 
 }
 \references{
-%% ~put references to the literature/web site here ~
+Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-validation for high-dimensional ridge regression. J Comp Graph Stat
 }
 \author{
 %%  ~~who you are~~

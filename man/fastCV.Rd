@@ -47,7 +47,9 @@ Numeric. Upperbound for lambda.
 
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Note that this function requires loading the orphaned \code{penalized} package. 
+This function is kept for reproducibility of results. 
+Use \code{\link{fastCV2}} if you do not have access to \code{penalized}. 
 }
 \value{
 Numerical vector containing penalties optimized separately per data block. Useful for initialization.
@@ -66,7 +68,7 @@ This function uses SVD for fast cross-validation.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{optLambdas}}, \code{\link{optLambdasWrap}} which optimize the penalties jointly.}
+\code{\link{optLambdas}}, \code{\link{optLambdasWrap}} which optimize the penalties jointly. \code{\link{fastCV2}}, which does not depend on the penalized package}
 \examples{
 
 }
