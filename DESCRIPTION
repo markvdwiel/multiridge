@@ -1,12 +1,12 @@
 Package: multiridge
 Type: Package
 Title: Fast cross-validation for multi-penalty ridge regression
-Version: 1.2
-Date: 2021-01-19
+Version: 1.3
+Date: 2021-25-03
 Author: Mark A. van de Wiel
 Maintainer: Mark A. van de Wiel <mark.vdwiel@amsterdamumc.nl>
-Depends: R (>= 3.4.0), penalized, survival, pROC, risksetROC, mgcv
+Depends: R (>= 3.4.0), survival, pROC, risksetROC, mgcv
 Suggests: snowfall
-Description: The package implements multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation or maximum marginal likelihood. It allows for multiple high-dimensional data types that require penalization, as well as unpenalized variables. Moreover, it allows a paired penalty for paired data types, and preferential data types can be specified. 
+Description: The package implements multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation and marginal likelihood maximization. It allows for multiple high-dimensional data types that require penalization, as well as unpenalized variables. Moreover, it allows a paired penalty for paired data types, and preferential data types can be specified. 
 License: GPL (>=3) 
 Lazyload: yes
