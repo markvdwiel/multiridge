@@ -17,7 +17,7 @@ optLambdas(penaltiesinit = NULL, XXblocks, Y, X1 = NULL, pairing = NULL, folds,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
  \item{penaltiesinit}{
-Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV}}.
+Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV2}}.
 }
   \item{XXblocks}{
 List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
@@ -91,22 +91,11 @@ List, with components:
 \item{allsc}{Matrix with CV scores for all penalty parameter configurations used by the optimizer}
 }
 
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{optLambdasWrap}} for i) (recommended) optimization in two steps: first global, then local; and ii) sequential optimization
-when some data types are preferred over others. \code{\link{fastCV}} for initialization of penalties.
+when some data types are preferred over others. \code{\link{fastCV2}} for initialization of penalties.
 }
-\examples{
 
-}

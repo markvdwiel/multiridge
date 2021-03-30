@@ -8,18 +8,19 @@ Outer-loop cross-validation for estimating performance of marginal likelihood ba
 Outer-loop cross-validation for estimating performance of marginal likelihood based \code{multiridge}.
 Outer fold is for testing;  penalty parameter tuning is performed by marginal likelihood estimation}
 \usage{
-mlikCV(penaltiesinit, XXblocks, Y, pairing = NULL, outfold = 5, nrepeatout = 1, balance = TRUE,
-    fixedfolds = TRUE,  model = NULL, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE),
-    reltol = 1e-04,  trace = FALSE,  optmethod1 = "SANN", optmethod2 = ifelse(length(penaltiesinit)
-    == 1, "Brent", "Nelder-Mead"), maxItropt1 = 10, maxItropt2 = 25, parallel = FALSE, pref = NULL,
-    fixedpen = NULL, sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
+mlikCV(penaltiesinit, XXblocks, Y, pairing = NULL, outfold = 5, nrepeatout = 1,
+balance = TRUE,fixedfolds = TRUE,  model = NULL, intercept = ifelse(class(Y) ==
+"Surv", FALSE, TRUE),reltol = 1e-04,  trace = FALSE,  optmethod1 = "SANN",
+optmethod2 = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"),
+maxItropt1 = 10, maxItropt2 = 25, parallel = FALSE, pref = NULL,
+fixedpen = NULL, sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
 }
 
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
  \item{penaltiesinit}{
-Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV}}.
+Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV2}}.
 }
   \item{XXblocks}{
 List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
@@ -98,15 +99,7 @@ List with the following components:
 \item{true}{True responses}
 \item{linpred}{Cross-validated linear predictors}
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -114,8 +107,5 @@ List with the following components:
 \code{\link{optLambdas_mgcv}}, \code{\link{optLambdas_mgcvWrap}} which optimize the penalties.
 \code{\link{Scoring}} which may applied to output of this function to obtain overall cross-validated performance score.
 \code{\link{doubleCV}} for double cross-validation counterpart.
-}
-
-\examples{
 }
 

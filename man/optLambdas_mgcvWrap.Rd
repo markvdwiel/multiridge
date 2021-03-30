@@ -16,7 +16,7 @@ optLambdas_mgcvWrap(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, re
 %- maybe also 'usage' for other objects documented here.
 \arguments{
    \item{penaltiesinit}{
-Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV}}.
+Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV2}}.
 }
   \item{XXblocks}{
 List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
@@ -86,18 +86,9 @@ List, with components:
 Wood, S. N. (2011), Fast stable restricted maximum likelihood and marginal likelihood
 estimation of semiparametric generalized linear models, J. Roy. Statist. Soc., B 73(1), 3-36.
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{optLambdas_mgcv}} for one-pass optimization.
 }
-\examples{
-}
-

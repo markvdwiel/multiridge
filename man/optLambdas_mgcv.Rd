@@ -16,7 +16,7 @@ optLambdas_mgcv(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol
 %- maybe also 'usage' for other objects documented here.
 \arguments{
  \item{penaltiesinit}{
-Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV}}.
+Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV2}}.
 }
   \item{XXblocks}{
 List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
@@ -71,22 +71,10 @@ List, with components:
 \item{allsc}{Matrix with marginal likelihood scores for all penalty parameter configurations used by the optimizer}
 }
 
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{optLambdas_mgcvWrap}} for i) (recommended) optimization in two steps: first global, then local; and ii) sequential optimization
 when some data types are preferred over others.
-}
-\examples{
-
 }

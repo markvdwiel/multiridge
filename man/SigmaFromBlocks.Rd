@@ -16,38 +16,17 @@ SigmaFromBlocks(XXblocks, penalties, pairing = NULL)
 List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
 }
   \item{penalties}{
-Numeric vector, representing penaltyparameters. 
+Numeric vector, representing penaltyparameters.
 }
   \item{pairing}{
 Numerical vector of length 3 or \code{NULL} when pairs are absent. Represents the indices (in \code{XXblocks}) of the two data blocks involved in pairing,
 plus the index of the paired block.
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+
 \examples{
 #Example
 #Simulate

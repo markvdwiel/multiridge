@@ -9,8 +9,8 @@ Iterative weighted least squares algorithm for linear and logistic ridge regress
 Iterative weighted least squares algorithm for linear and logistic ridge regression. Updates the weights and linear predictors until convergence.
 }
 \usage{
-IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07, maxItr = 25, trace = FALSE,
-  model = NULL, E0 = NULL)
+IWLSridge(XXT, Y, X1 = NULL, intercept = TRUE, frac1 = NULL, eps = 1e-07,
+maxItr = 25, trace = FALSE, model = NULL, E0 = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -65,19 +65,12 @@ List, containing:
 \references{
 Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-validation for high-dimensional ridge regression. J Comp Graph Stat
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{IWLSCoxridge}} for Cox ridge. \code{\link{betasout}} for obtaining parameter estimates.
-\code{\link{predictIWLS}} for predictions on new samples.
+\code{\link{predictIWLS}} for predictions on new samples. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
-\examples{
 
-}

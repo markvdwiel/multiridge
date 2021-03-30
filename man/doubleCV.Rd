@@ -8,16 +8,17 @@ Double cross-validation for estimating performance of \code{multiridge}
 Double cross-validation for estimating performance of \code{multiridge}. Outer fold is for testing, inner fold for penalty parameter tuning}
 \usage{
 doubleCV(penaltiesinit, XXblocks, Y, X1 = NULL, pairing = NULL, outfold = 5,
-  infold = 10, nrepeatout =   1, nrepeatin = 1, balance = TRUE, fixedfolds = TRUE,
-  intercept = ifelse(class(Y) == "Surv", FALSE,     TRUE), frac1 = NULL, score = "loglik",
-  model = NULL, eps = 1e-07, maxItr = 10, trace = FALSE, printCV   = TRUE, reltol = 1e-04,
-  optmethod1 = "SANN", optmethod2 = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"),
-  maxItropt1 = 10, maxItropt2 = 25, save = FALSE, parallel = FALSE, pref = NULL, fixedpen = NULL)
+  infold = 10, nrepeatout =   1, nrepeatin = 1, balance = TRUE, fixedfolds =
+  TRUE, intercept = ifelse(class(Y) == "Surv", FALSE,     TRUE), frac1 = NULL,
+  score = "loglik",model = NULL, eps = 1e-07, maxItr = 10, trace = FALSE,
+  printCV   = TRUE, reltol = 1e-04, optmethod1 = "SANN", optmethod2 =
+  ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"), maxItropt1 = 10,
+  maxItropt2 = 25, save = FALSE, parallel = FALSE, pref = NULL, fixedpen = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
  \item{penaltiesinit}{
-Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV}}.
+Numeric vector. Initial values for penaltyparameters. May be obtained from \code{\link{fastCV2}}.
 }
   \item{XXblocks}{
 List of \code{nxn} matrices. Usually output of \code{\link{createXXblocks}}.
@@ -116,15 +117,7 @@ List with the following components:
 \item{true}{True responses}
 \item{linpred}{Cross-validated linear predictors}
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -132,6 +125,3 @@ List with the following components:
 \code{\link{optLambdas}}, \code{\link{optLambdasWrap}} which optimize the penalties.
 \code{\link{Scoring}} which may applied to output of this function to obtain overall cross-validated performance score.
 }
-\examples{
-}
-

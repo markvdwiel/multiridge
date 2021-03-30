@@ -33,15 +33,6 @@ the parameter vector.
 \value{
 Numerical vector of linear predictor for the test samples.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

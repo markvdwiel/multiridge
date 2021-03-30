@@ -31,15 +31,6 @@ all iterative calculation are performed on the out put of this function, which c
 List. Same number of component as \code{datablocks} when \code{which2pair = NULL}, or augmented with one paired data block.
 Dimension is \code{nxn} for all components.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

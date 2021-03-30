@@ -8,7 +8,9 @@ Fast cross-validation per data block
 Fast cross-validation for high-dimensional data. Finds optimal penalties separately per data block. Useful for initialization.
 }
 \usage{
-fastCV2(XXblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) == "Surv", FALSE, TRUE), parallel   = FALSE, fixedfolds = TRUE, model = NULL, eps = 1e-10, lambdamax= 10^6)
+fastCV2(XXblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) ==
+"Surv", FALSE, TRUE), parallel   = FALSE, fixedfolds = TRUE, model = NULL,
+eps = 1e-10, lambdamax= 10^6)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -48,25 +50,16 @@ Numeric. Upperbound for lambda.
 }
 \details{
 This function is basically a wrapper for applying \code{\link{optLambdas}} per data block separately using Brent optimization.
-Unlike \code{\link{fastCV}} it does not require loading the (orphaned) penalized package.
 }
 \value{
 Numerical vector containing penalties optimized separately per data block. Useful for initialization.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{fastCV}}, \code{\link{optLambdas}}, \code{\link{optLambdasWrap}} which optimize the penalties jointly.}
-\examples{
+\code{\link{optLambdas}}, \code{\link{optLambdasWrap}} which optimize the penalties jointly.
+A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}}
 
-}

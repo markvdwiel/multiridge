@@ -39,22 +39,5 @@ on \code{kfold*nrepeat}, the number of training-test splits evaluated.
 \value{
 List object with \code{kfold*nrepeat} elements containing the sample indices of the left-out samples per split.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\examples{
-
-}
 

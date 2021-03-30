@@ -26,15 +26,6 @@ matches the input. If not, the function adds a paired data block, pairing the tw
 \value{
 List. Same as \code{datablocks} when \code{which2pair = NULL}, or augmented with one paired data block.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

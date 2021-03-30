@@ -33,15 +33,7 @@ Numerical vector of length 3 or \code{NULL}.
 List. Number of components equals number of components of \code{Xblocks} plus one, as the output is augmented with an intercept estimate (first component, \code{NULL} if absent).
 Each component is a numerical vector representing regression parameter estimates. Lengths of vectors match column dimensions of \code{Xblocks} (nr of variables for given data type)
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
 
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

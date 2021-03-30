@@ -51,19 +51,10 @@ Numeric, marginal likelihood score for given penalties
 Wood, S. N. (2011), Fast stable restricted maximum likelihood and marginal likelihood
 estimation of semiparametric generalized linear models, J. Roy. Statist. Soc., B 73(1), 3-36.
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{CVscore}} for cross-validation alternative
 }
-\examples{
-
-}
-

@@ -42,21 +42,9 @@ CV-ed log-likelihood, and c-index. %%  ~~ If necessary, more details than the de
 \value{
 Numerical value.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{CVscore}} for obtaining the cross-validated score (for given penalties), and \code{\link{doubleCV}} to obtain doubly cross-validated linear predictors to which \code{Scoring} can be applied to estimated predictive performance by double cross-validation.
-}
-\examples{
-
 }

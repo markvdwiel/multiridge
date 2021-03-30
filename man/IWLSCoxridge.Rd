@@ -2,13 +2,14 @@
 \alias{IWLSCoxridge}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Iterative weighted least squares algorithm for Cox ridge regression. 
+Iterative weighted least squares algorithm for Cox ridge regression.
 }
 \description{
-Iterative weighted least squares algorithm for Cox ridge regression. Updates the weights and linear predictors until convergence. 
+Iterative weighted least squares algorithm for Cox ridge regression. Updates the weights and linear predictors until convergence.
 }
 \usage{
-IWLSCoxridge(XXT, Y, X1 = NULL, intercept = FALSE, eps = 1e-07, maxItr = 25, trace = FALSE, E0 = NULL)
+IWLSCoxridge(XXT, Y, X1 = NULL, intercept = FALSE, eps = 1e-07, maxItr = 25,
+trace = FALSE, E0 = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,7 +35,7 @@ Integer. Maximum number of iterations used in IWLS.
 Boolean. Should the output of the IWLS algorithm be traced?
 }
   \item{E0}{
-Numerical vector or \code{NULL}. Optional initial values for linear predictor. Same length as \code{Y}. Usually \code{NULL}, which initializes linear predictor with 0. 
+Numerical vector or \code{NULL}. Optional initial values for linear predictor. Same length as \code{Y}. Usually \code{NULL}, which initializes linear predictor with 0.
 }
 }
 \details{
@@ -57,18 +58,10 @@ List, containing:
 \references{
 Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-validation for high-dimensional ridge regression. J Comp Graph Stat
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{IWLSridge}} for linear and logistic ridge. \code{\link{betasout}} for obtaining parameter estimates. 
-\code{\link{predictIWLS}} for predictions on new samples. 
-}
-\examples{
+\code{\link{IWLSridge}} for linear and logistic ridge. \code{\link{betasout}} for obtaining parameter estimates.
+\code{\link{predictIWLS}} for predictions on new samples.
 }

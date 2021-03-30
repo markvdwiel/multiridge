@@ -8,7 +8,10 @@ Cross-validated score
 Cross-validated score for given penalty parameters.
 }
 \usage{
-CVscore(penalties, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept = ifelse(class(Y) == "Surv",   FALSE, TRUE), frac1 = NULL, score = "loglik", model = NULL, eps = 1e-07, maxItr = 100, trace = FALSE,   printCV = TRUE, save = FALSE, parallel = F)
+CVscore(penalties, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept =
+ifelse(class(Y) == "Surv",FALSE, TRUE), frac1 = NULL, score = "loglik", model =
+NULL, eps = 1e-07, maxItr = 100, trace = FALSE,   printCV = TRUE, save = FALSE,
+parallel = F)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -68,22 +71,11 @@ See \code{\link{Scoring}} for details on \code{score}.
 \value{
 Numeric, cross-validated prediction score for given penalties
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{doubleCV}} for double cross-validation, used for performance evaluation
-}
-\examples{
-
 }
 
