@@ -46,5 +46,6 @@ Numerical value.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{CVscore}} for obtaining the cross-validated score (for given penalties), and \code{\link{doubleCV}} to obtain doubly cross-validated linear predictors to which \code{Scoring} can be applied to estimated predictive performance by double cross-validation.
+\code{\link{CVscore}} for obtaining the cross-validated score (for given penalties), and \code{\link{doubleCV}} to obtain doubly cross-validated linear predictors to which \code{Scoring} can be applied to estimated predictive performance by double cross-validation. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }

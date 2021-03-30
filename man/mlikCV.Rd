@@ -106,6 +106,7 @@ List with the following components:
 \seealso{
 \code{\link{optLambdas_mgcv}}, \code{\link{optLambdas_mgcvWrap}} which optimize the penalties.
 \code{\link{Scoring}} which may applied to output of this function to obtain overall cross-validated performance score.
-\code{\link{doubleCV}} for double cross-validation counterpart.
+\code{\link{doubleCV}} for double cross-validation counterpart. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 

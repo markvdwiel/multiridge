@@ -63,5 +63,6 @@ Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-
 
 \seealso{
 \code{\link{IWLSridge}} for linear and logistic ridge. \code{\link{betasout}} for obtaining parameter estimates.
-\code{\link{predictIWLS}} for predictions on new samples.
+\code{\link{predictIWLS}} for predictions on new samples. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }

@@ -30,7 +30,8 @@ List. Same as \code{datablocks} when \code{which2pair = NULL}, or augmented with
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{createXXblocks}}
+\code{\link{createXXblocks}}. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 
 

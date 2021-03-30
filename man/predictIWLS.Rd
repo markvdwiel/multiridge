@@ -40,7 +40,8 @@ Numerical vector of linear predictor for the test samples.
 \code{\link{IWLSridge}} (\code{\link{IWLSCoxridge}}) for fitting linear and
 logistic ridge (Cox ridge). \code{\link{betasout}} for obtaining parameter
 estimates.
-\code{\link{Scoring}} to evaluate the predictions.
+\code{\link{Scoring}} to evaluate the predictions. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 \examples{
 #Example below shows how to create the input argument Sigmanew (for simulated data)

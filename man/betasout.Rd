@@ -38,6 +38,7 @@ Each component is a numerical vector representing regression parameter estimates
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{createXblocks}}
+\code{\link{createXblocks}}. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 

@@ -96,6 +96,7 @@ List, with components:
 
 \seealso{
 \code{\link{optLambdasWrap}} for i) (recommended) optimization in two steps: first global, then local; and ii) sequential optimization
-when some data types are preferred over others. \code{\link{fastCV2}} for initialization of penalties.
+when some data types are preferred over others. \code{\link{fastCV2}} for initialization of penalties. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 

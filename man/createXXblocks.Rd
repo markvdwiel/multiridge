@@ -35,7 +35,8 @@ Dimension is \code{nxn} for all components.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{createXblocks}}, which is required when parameter estimates are desired (not needed for prediction)
+\code{\link{createXblocks}}, which is required when parameter estimates are desired (not needed for prediction). A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 \examples{
 #Example

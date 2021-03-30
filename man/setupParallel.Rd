@@ -34,5 +34,6 @@ No output.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-Snowfall package for further documentation on parallel computing.
+Snowfall package for further documentation on parallel computing. A full demo and data are available from:\cr
+\url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
