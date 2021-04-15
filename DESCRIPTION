@@ -5,7 +5,8 @@ Version: 1.7
 Date: 2021-04-15
 Author: Mark A. van de Wiel
 Maintainer: Mark A. van de Wiel <mark.vdwiel@amsterdamumc.nl>
-Depends: R (>= 3.5.0), survival, pROC, risksetROC, mgcv, snowfall
+Depends: R (>= 3.5.0), survival, pROC, risksetROC, mgcv
+Suggests: snowfall
 Description: Multi-penalty linear, logistic and cox ridge regression, including estimation of the penalty parameters by efficient (repeated) cross-validation and marginal likelihood maximization. Multiple high-dimensional data types that require penalization are allowed, as well as unpenalized variables. Paired and preferential data types can be specified. See Van de Wiel et al. (2021), <arXiv:2005.09301>. 
 License: GPL (>=3) 
 
