@@ -13,7 +13,7 @@ balance = TRUE,fixedfolds = TRUE,  model = NULL, intercept = ifelse(class(Y) ==
 "Surv", FALSE, TRUE),reltol = 1e-04,  trace = FALSE,  optmethod1 = "SANN",
 optmethod2 = ifelse(length(penaltiesinit) == 1, "Brent", "Nelder-Mead"),
 maxItropt1 = 10, maxItropt2 = 25, parallel = FALSE, pref = NULL,
-fixedpen = NULL, sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
+fixedpen = NULL, sigmasq = 1, opt.sigma=ifelse(model=="linear",TRUE, FALSE))
 }
 
 
@@ -108,5 +108,27 @@ List with the following components:
 \code{\link{Scoring}} which may applied to output of this function to obtain overall cross-validated performance score.
 \code{\link{doubleCV}} for double cross-validation counterpart. A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
+}
+
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+
+# Find initial lambdas: fast CV per data block separately.
+cvperblock2 <- fastCV2(XXblocks=XXmirmeth,Y=resp,kfold=10,fixedfolds = TRUE)
+lambdas <- cvperblock2$lambdas
+
+# Outer cross-validation, inner marginal likelihood optimization
+\dontrun{
+perfmlik <- mlikCV(penaltiesinit=lambdas,XXblocks=XXmirmeth,Y=resp,outfold=10,
+nrepeatout=1)
+
+
+# Performance metrics
+Scoring(perfmlik$linpred,perfmlik$true,score="auc",print=TRUE)
+Scoring(perfmlik$linpred,perfmlik$true,score="brier",print=TRUE)
+Scoring(perfmlik$linpred,perfmlik$true,score="loglik",print=TRUE)
+}
 }
 

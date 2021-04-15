@@ -11,7 +11,7 @@ Optimizes a marginal likelihood score w.r.t. ridge penalties for multiple data b
 optLambdas_mgcv(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4,
   optmethod=ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),maxItropt=500,
   tracescore=TRUE, fixedpen=NULL, fixedseed =TRUE, sigmasq = 1,
-  opt.sigma=ifelse(model=="linear",T, F))
+  opt.sigma=ifelse(model=="linear",TRUE, FALSE))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -79,3 +79,29 @@ List, with components:
 when some data types are preferred over others. A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
+
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+
+# Find initial lambdas: fast CV per data block separately.
+cvperblock2 <- fastCV2(XXblocks=XXmirmeth,Y=resp,kfold=10,fixedfolds = TRUE)
+lambdas <- cvperblock2$lambdas
+
+# Create (repeated) CV-splits of the data.
+leftout <- CVfolds(Y=resp,kfold=10,nrepeat=3,fixedfolds = TRUE)
+
+# Compute cross-validated score for initial lambdas
+CVscore(penalties=lambdas, XXblocks=XXmirmeth,Y=resp,folds=leftout,
+score="loglik")
+
+# Optimize by using marginal likelihood criterion
+jointlambdas2 <- optLambdas_mgcvWrap(penaltiesinit=lambdas, XXblocks=XXmirmeth,
+Y=resp)
+
+# Optimal lambdas
+optlambdas <- jointlambdas2$optpen
+
+}
+

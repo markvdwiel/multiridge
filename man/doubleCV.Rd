@@ -126,3 +126,24 @@ List with the following components:
 \code{\link{Scoring}} which may applied to output of this function to obtain overall cross-validated performance score. A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
+
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+
+# Find initial lambdas: fast CV per data block separately.
+cvperblock2 <- fastCV2(XXblocks=XXmirmeth,Y=resp,kfold=10,fixedfolds = TRUE)
+lambdas <- cvperblock2$lambdas
+
+# Double cross-validation
+\dontrun{
+perf <- doubleCV(penaltiesinit=lambdas,XXblocks=XXmirmeth,Y=resp,
+score="loglik",outfold=10, infold=10, nrepeatout=1, nrepeatin=3, parallel=TRUE)
+
+# Performance metrics
+Scoring(perf$linpred,perf$true,score="auc",print=TRUE)
+Scoring(perf$linpred,perf$true,score="brier",print=TRUE)
+Scoring(perf$linpred,perf$true,score="loglik",print=TRUE)
+}
+}

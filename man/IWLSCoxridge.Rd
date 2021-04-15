@@ -53,7 +53,7 @@ List, containing:
 \item{unpen}{Boolean: are there any unpenalized covariates involved? Passed on to other functions}
 \item{intercept}{Boolean: Is an intercept included? }
 \item{eta0}{Numerical vector: Initial linear predictors}
-
+\item{X1}{Matrix: design matrix unpenalized variables}
 }
 \references{
 Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-validation for high-dimensional ridge regression. J Comp Graph Stat
@@ -65,4 +65,21 @@ Mark A. van de Wiel, Mirrelijn van Nee, Armin Rauschenberger (2021). Fast cross-
 \code{\link{IWLSridge}} for linear and logistic ridge. \code{\link{betasout}} for obtaining parameter estimates.
 \code{\link{predictIWLS}} for predictions on new samples. A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
+}
+
+
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+lambdas <- c(100,1000)
+
+# Create fake survival data
+respsurv <- Surv(rexp(length(resp)),resp)
+
+# Prepare fitting for the specified penalties.
+XXT <- SigmaFromBlocks(XXmirmeth,penalties=lambdas)
+
+# Fit. fit$etas contains the n linear predictors
+fit <- IWLSCoxridge(XXT,Y=respsurv)
 }

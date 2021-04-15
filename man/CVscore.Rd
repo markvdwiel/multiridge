@@ -11,7 +11,7 @@ Cross-validated score for given penalty parameters.
 CVscore(penalties, XXblocks, Y, X1 = NULL, pairing = NULL, folds, intercept =
 ifelse(class(Y) == "Surv",FALSE, TRUE), frac1 = NULL, score = "loglik", model =
 NULL, eps = 1e-07, maxItr = 100, trace = FALSE,   printCV = TRUE, save = FALSE,
-parallel = F)
+parallel = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -70,6 +70,20 @@ See \code{\link{Scoring}} for details on \code{score}.
 }
 \value{
 Numeric, cross-validated prediction score for given penalties
+}
+
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+
+# Find initial lambdas: fast CV per data block separately.
+cvperblock2 <- fastCV2(XXblocks=XXmirmeth,Y=resp,kfold=10,fixedfolds = TRUE)
+lambdas <- cvperblock2$lambdas
+
+# Create training-test splits
+leftout <- CVfolds(Y=resp,kfold=10,nrepeat=3,fixedfolds = TRUE)
+CVscore(penalties=lambdas, XXblocks=XXmirmeth,Y=resp,folds=leftout,score="loglik")
 }
 
 

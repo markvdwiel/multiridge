@@ -24,6 +24,10 @@ plus the index of the paired block.
 }
 }
 
+\value{
+Matrix of size \code{nxn}.
+}
+
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 

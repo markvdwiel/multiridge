@@ -11,7 +11,7 @@ Sequentially optimizes a marginal likelihood score w.r.t. ridge penalties for mu
 optLambdas_mgcvWrap(penaltiesinit=NULL, XXblocks,Y, pairing=NULL, model=NULL, reltol=1e-4,
   optmethod1= "SANN", optmethod2 =ifelse(length(penaltiesinit)==1,"Brent", "Nelder-Mead"),
   maxItropt1=10,maxItropt2=25,tracescore=TRUE,fixedseed =TRUE, pref=NULL, fixedpen=NULL,
-  sigmasq = 1, opt.sigma=ifelse(model=="linear",T, F))
+  sigmasq = 1, opt.sigma=ifelse(model=="linear",TRUE, FALSE))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

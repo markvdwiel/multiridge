@@ -116,6 +116,24 @@ List, with components:
 \item{optpen}{Numerical vector with final, optimal penalties}
 }
 
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+
+# Find initial lambdas: fast CV per data block separately.
+cvperblock2 <- fastCV2(XXblocks=XXmirmeth,Y=resp,kfold=10,fixedfolds = TRUE)
+lambdas <- cvperblock2$lambdas
+
+# Create (repeated) CV-splits of the data.
+leftout <- CVfolds(Y=resp,kfold=10,nrepeat=3,fixedfolds = TRUE)
+
+# Optimizes cross-validate criterion (default: log-lik)
+# Increase the number of iterations for optimal results
+jointlambdas <- optLambdasWrap(penaltiesinit=lambdas, XXblocks=XXmirmeth,Y=resp,
+folds=leftout,score="loglik",save=T,maxItropt1=5, maxItropt2=5)
+}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

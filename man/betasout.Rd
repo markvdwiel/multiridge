@@ -42,3 +42,22 @@ Each component is a numerical vector representing regression parameter estimates
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
 }
 
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+lambdas <- c(100,1000)
+
+# Prepare fitting for the specified penalties.
+XXT <- SigmaFromBlocks(XXmirmeth,penalties=lambdas)
+
+# Fit. fit$etas contains the n linear predictors
+fit <- IWLSridge(XXT,Y=resp)
+
+# Computation of the regression coefficients requires the original
+# (large!) nxp data sets, available from link above
+\dontrun{
+Xbl <- createXblocks(list(datamir,datameth))
+betas <- betasout(fit, Xblocks=Xbl, penalties=lambdas)
+}
+}

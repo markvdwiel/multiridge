@@ -40,6 +40,12 @@ on \code{kfold*nrepeat}, the number of training-test splits evaluated.
 List object with \code{kfold*nrepeat} elements containing the sample indices of the left-out samples per split.
 }
 
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+leftout <- CVfolds(Y=resp,kfold=10,nrepeat=3,fixedfolds = TRUE)
+}
+
 \seealso{
 A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}

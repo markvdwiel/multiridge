@@ -27,13 +27,19 @@ Character vector. Libraries to be loaded in parallel. Defaults to the libraries 
 \details{
 Parallel computing is available for several functions that rely on cross-validation. If double CV is used, parallel computing is applied to the outer loop, to optimize efficiency.
 }
-\value{
-No output.
-}
+
+\value{No return value, called for side effects}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 Snowfall package for further documentation on parallel computing. A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
+}
+
+\examples{
+\dontrun{
+setupParallel(ncpus=4)
+}
 }

@@ -28,6 +28,26 @@ List
 \item{Xaug2}{Augmented data matrix 2}
 }
 
+\examples{
+#Example
+#Simulate
+n1 <- 10
+n2 <- 20
+p <- 100
+X1 <- matrix(rnorm(p*n1),nrow=n1)
+X2 <- matrix(rnorm(p*n2),nrow=n2)
+
+#check whether column dimension is correct
+ncol(X1)==ncol(X2)
+
+#create cross-product
+Xaugm <- augment(X1,X2)
+
+#check dimensions (should be (n1+n2) x p)
+dim(Xaugm[[1]])
+dim(Xaugm[[2]])
+}
+
 
 
 

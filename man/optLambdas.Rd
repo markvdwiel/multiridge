@@ -91,6 +91,24 @@ List, with components:
 \item{allsc}{Matrix with CV scores for all penalty parameter configurations used by the optimizer}
 }
 
+\examples{
+data(dataXXmirmeth)
+resp <- dataXXmirmeth[[1]]
+XXmirmeth <- dataXXmirmeth[[2]]
+
+# Find initial lambdas: fast CV per data block separately.
+cvperblock2 <- fastCV2(XXblocks=XXmirmeth,Y=resp,kfold=10,fixedfolds = TRUE)
+lambdas <- cvperblock2$lambdas
+
+# Create (repeated) CV-splits of the data.
+leftout <- CVfolds(Y=resp,kfold=10,nrepeat=3,fixedfolds = TRUE)
+
+# One-pass optimization
+# Increase the number of iterations for optimal results
+jointlambdas <- optLambdas(penaltiesinit=lambdas, XXblocks=XXmirmeth,Y=resp,
+folds=leftout,score="loglik",save=T,maxItropt=5)
+}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

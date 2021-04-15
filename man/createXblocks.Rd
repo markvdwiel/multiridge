@@ -24,7 +24,7 @@ matches the input. If not, the function adds a paired data block, pairing the tw
 \code{which2pair}.
 }
 \value{
-List. Same as \code{datablocks} when \code{which2pair = NULL}, or augmented with one paired data block.
+List. Same length as \code{datablocks} when \code{which2pair = NULL}, or augmented with one paired data block.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -32,6 +32,12 @@ List. Same as \code{datablocks} when \code{which2pair = NULL}, or augmented with
 \seealso{
 \code{\link{createXXblocks}}. A full demo and data are available from:\cr
 \url{https://drive.google.com/open?id=1NUfeOtN8-KZ8A2HZzveG506nBwgW64e4}
+}
+
+\examples{
+n <- 43
+p <- 100
+fakeXbl <- createXblocks(list(X1 = matrix(rnorm(n*p),nrow=n),X2 = matrix(rnorm(n*p),nrow=n)))
 }
 
 
