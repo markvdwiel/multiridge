@@ -1,5 +1,6 @@
 # multiridge
 R package for multi-penalty ridge regression
+NOTE: versions V1.7 and higher are upto 10 times faster than earlier versions 
 
 library(devtools);
 install_github("markvdwiel/multiridge")
