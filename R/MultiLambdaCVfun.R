@@ -32,7 +32,7 @@ setupParallel <- function(ncpus=1, sourcefile=NULL,sourcelibraries=c("multiridge
 #fast CV that does not depend on penalized package
 fastCV2 <- function(XXblocks,Y,X1=NULL,kfold=10,
                     intercept=ifelse(class(Y)=="Surv", FALSE, TRUE),parallel=FALSE,fixedfolds = TRUE,
-                    model=NULL, eps=1e-10, reltol=0.5, lambdamax = 10^6){
+                    model=NULL, eps=1e-10, reltol=0.5, lambdamax = 10^6,traceCV=TRUE){
   # XXblocks=XXbl;Y=resp;kfold=10;fixedfolds = TRUE; intercept <-TRUE;
   # parallel=FALSE;model=NULL; eps=1e-10; lambdamax = 10^6
   if(is.null(model)){
@@ -57,7 +57,7 @@ fastCV2 <- function(XXblocks,Y,X1=NULL,kfold=10,
     #if(class(kfold) == "list") {
     #converts leftout represented as list to fold represented as vector (as required by optL2() function)
     XXbl <- list(XX)
-    ol1 <- try(optLambdas(penaltiesinit = NULL, XXblocks=XXbl, Y=Y, X1=X1, folds=leftout, intercept=intercept, model=model, reltol=reltol),silent = TRUE)
+    ol1 <- try(optLambdas(penaltiesinit = NULL, XXblocks=XXbl, Y=Y, X1=X1, folds=leftout, intercept=intercept, model=model, reltol=reltol,traceCV=traceCV),silent = TRUE)
     if(class(ol1) == "try-error") ol1 <- list(lambda=lambdamax)
     return(ol1)
   }
