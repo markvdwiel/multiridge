@@ -10,7 +10,7 @@ Fast cross-validation for high-dimensional data. Finds optimal penalties separat
 \usage{
 fastCV2(XXblocks, Y, X1 = NULL, kfold = 10, intercept = ifelse(class(Y) ==
 "Surv", FALSE, TRUE), parallel   = FALSE, fixedfolds = TRUE, model = NULL,
-eps = 1e-10, reltol = 1e-03, lambdamax= 10^6)
+eps = 1e-10, reltol = 0.5, lambdamax= 10^6, traceCV=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -47,6 +47,10 @@ Scalar. Relative tolerance for optimization method.
 }
  \item{lambdamax}{
 Numeric. Upperbound for lambda.
+}
+
+ \item{traceCV}{
+Boolean. Should the CV results be traced and printed?
 }
 
 }
