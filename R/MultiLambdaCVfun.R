@@ -444,7 +444,7 @@ CVfolds <- function(Y,model=NULL,balance=TRUE,kfold=10,fixedfolds=TRUE,nrepeat=1
   if(model=="linear") balance <- FALSE
   CVfoldsrep <- function(rep){
     nsam <- length(response)
-    if (fixedfolds) set.seed(3534+rep-1) else set.seed(NULL)
+    if (fixedfolds) set.seed(3534+rep-1) #else set.seed(NULL)  #changed 19/4
     if (!balance) {
       rand <- sample(1:nsam)
       grs1 <- floor(nsam/kfold)
