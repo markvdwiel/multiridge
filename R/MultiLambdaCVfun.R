@@ -57,7 +57,7 @@ fastCV2 <- function(XXblocks,Y,X1=NULL,kfold=10,
     #if(class(kfold) == "list") {
     #converts leftout represented as list to fold represented as vector (as required by optL2() function)
     XXbl <- list(XX)
-    ol1 <- try(optLambdas(penaltiesinit = NULL, XXblocks=XXbl, Y=Y, X1=X1, folds=leftout, intercept=intercept, model=model, reltol=reltol,traceCV=traceCV),silent = TRUE)
+    ol1 <- try(optLambdas(penaltiesinit = NULL, XXblocks=XXbl, Y=Y, X1=X1, folds=leftout, intercept=intercept, model=model, reltol=reltol,traceCV=traceCV,fixedseed=fixedfolds),silent = TRUE)
     if(class(ol1) == "try-error") ol1 <- list(lambda=lambdamax)
     return(ol1)
   }
