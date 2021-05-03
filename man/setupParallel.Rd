@@ -8,13 +8,13 @@ Setting up parallel computing
 This function sets up parallel computing by the package \code{snowfall}.
 }
 \usage{
-setupParallel(ncpus = 1, sourcefile = NULL, sourcelibraries =
+setupParallel(ncpus = 2, sourcefile = NULL, sourcelibraries =
 c("multiridge","survival","pROC","risksetROC"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{ncpus}{
-Integer. Number of cpus to use.
+Integer. Number of cpus to use. Should be >= 2.
 }
   \item{sourcefile}{
 Character. Additional source files to be loaded in parallel. Only required when parallel computing is also desired for functions

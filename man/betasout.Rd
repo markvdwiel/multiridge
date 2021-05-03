@@ -8,7 +8,7 @@ Coefficient estimates from (converged) IWLS fit
 Extracts estimated regression coefficients from the final Iterative Weighted Least Squares fit, as obtained from linear, logistic, or Cox ridge regression.
 }
 \usage{
-betasout(IWLSfit, Xblocks, penalties, pairing = NULL)
+betasout(IWLSfit, Xblocks, X1=NULL, penalties, pairing = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,9 @@ List object, see details
 }
   \item{Xblocks}{
 List of data frames or matrices, representing \code{b=1,...,B} data blocks of dimensions \code{n x p_b}.
+}
+   \item{X1}{
+Matrix. Dimension \code{n x p_0, p_0 < n}, representing unpenalized covariates.
 }
   \item{penalties}{
 Numerical vector.
