@@ -378,23 +378,27 @@ SigmaFromBlocks <-function(XXblocks,penalties,pairing=NULL){
 
 #coefficient estimates given (converged) IWLS weights
 betasout <- function(IWLSfit,Xblocks,X1=NULL,penalties,pairing=NULL){
-  #IWLSfit <- fit1; Xblocks <- Xomics;penalties <- penpref;pairing=NULL
+  #IWLSfit <- fit; Xblocks <- Xbl;X1 = matrix(group,ncol=1);penalties <- optlambdas;pairing=c(1,2,3)
   n <- length(IWLSfit$etas)
-  nfeats <- unlist(lapply(Xblocks, ncol))
+  if(is.null(pairing)) nfeats <- unlist(lapply(Xblocks, ncol)) else nfeats <- unlist(lapply(Xblocks[pairing[1:2]], ncol))
+
   if(IWLSfit$intercept) X1 <- cbind(matrix(rep(1,n),ncol=1),X1)
-  if(!is.null(X1)){Xblocks <- c(list(X1),Xblocks); penalties <- c(0.001,penalties)}
+  if(!is.null(X1)){Xblocks <- c(list(X1),Xblocks); penalties <- c(0.001,penalties);
+  if(!is.null(pairing)) pairing <- pairing+1  #shift one
+  }
   LtX <- .LambdaInvtXFromBlocks(Xblocks,penalties,pairing)
-    Mmatl <- IWLSfit$Hresl$Mmatl
-    betas <- LtX %*% Mmatl
-    if(is.null(X1)){betaunpen <- NULL; betapen <- betas} else {
-      nunpen <- ncol(X1); betaunpen <- betas[1:nunpen];betapen <- betas[-(1:nunpen)]
-        }
+  Mmatl <- IWLSfit$Hresl$Mmatl
+  betas <- LtX %*% Mmatl
+  if(is.null(X1)){betaunpen <- NULL; betapen <- betas} else {
+    nunpen <- ncol(X1); betaunpen <- betas[1:nunpen];betapen <- betas[-(1:nunpen)]
+  }
   nbl <- length(nfeats)
   cumindex <- cumsum(c(0,nfeats))
   betaout <- lapply(1:nbl,function(bl) betapen[(cumindex[bl]+1):cumindex[bl+1]])
   betaout <- c(list(betaunpen),betaout)
   return(betaout)
 }
+
 
 
 
@@ -552,9 +556,11 @@ Scoring <- function(lp,Y,model=NULL,score=ifelse(model=="linear","mse","loglik")
       thescore <- thescore/length(lp)
     }
     if(score=="cindex"){
-      tm <- max(response[,1])
-      iAUCr <- risksetAUC(Stime=response[,1], status= response[,2], marker=lp, method="Cox",plot=FALSE,tmax=tm)
-      thescore<- iAUCr$Cindex
+      # tm <- max(response[,1])
+      # iAUCr <- risksetAUC(Stime=response[,1], status= response[,2], marker=lp, method="Cox",plot=FALSE,tmax=tm)
+      # thescore<- iAUCr$Cindex
+      lpmin <- -lp
+      thescore <- concordance(response ~ lpmin)$concordance
       if(is.na(thescore)) thescore <- 0.5
     }
   }
@@ -1002,17 +1008,19 @@ doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, in
   return(list(Hmat=Hmat,MW=MW,KW=KW))
 }
 
+#Xblocks: list of B matrices, dim nxp, each representing block-specific design
+#  When pairing applies, should be augmented with
+#a block Q %*% X, where Q = 1 - diag(2), X = [X_{1,.1}, ..., X_{1,.p}, X_{2,.1}, ..., X_{2,.p}].
+#Q is a permutation matrix, so product can be efficiently computed.
+#pairing: vector of length 3. First elements denotes the index of the first block matrix (and penalty) involved in the pair,
+#second the index of the 2; third: index of the cross-block (and corresponding pairing penalty).
+#Xblocks =Xblocks; pairing=c(1,2,3);penalties=c(penaltiesstart,4000)
+#Xblocks <- list(X[,1:p1],X[,-(1:p1)]);penalties <- c(1,5);pairing=NULL
+#Xblocks = Xblocks;penalties = penalties; pairing=c(1,2,3)
+
+
 #auxiliary function for betasout
 .LambdaInvtXFromBlocks<-function(Xblocks,penalties,pairing=NULL){
-  #Xblocks: list of B matrices, dim nxp, each representing block-specific design
-  #  When pairing applies, should be augmented with
-  #a block Q %*% X, where Q = 1 - diag(2), X = [X_{1,.1}, ..., X_{1,.p}, X_{2,.1}, ..., X_{2,.p}].
-  #Q is a permutation matrix, so product can be efficiently computed.
-  #pairing: vector of length 3. First elements denotes the index of the first block matrix (and penalty) involved in the pair,
-  #second the index of the 2; third: index of the cross-block (and corresponding pairing penalty).
-  #Xblocks =Xblocks; pairing=c(1,2,3);penalties=c(penaltiesstart,4000)
-  #Xblocks <- list(X[,1:p1],X[,-(1:p1)]);penalties <- c(1,5);pairing=NULL
-  #Xblocks = Xblocks;penalties = c(3,2,1); pairing=c(1,2,3)
 
   nblocks <- length(Xblocks)
   if(nblocks != length(penalties)){
@@ -1026,7 +1034,7 @@ doubleCV <- function(penaltiesinit,XXblocks,Y,X1=NULL,pairing=NULL,outfold=5, in
       invpair <- solve(matrix(c(penalties[pairing[1]],-penalties[pairing[3]],
                                 -penalties[pairing[3]],penalties[pairing[2]]),nrow=2))
       invpenpair <- c(invpair[1,1],invpair[2,2],invpair[1,2])
-      LtX <- rbind(LtX,t(Xblocks[[3]]) * invpenpair[3] + Reduce('rbind', lapply(pairing[1:2],function(i) t(Xblocks[[i]]) * invpenpair[i]))) #
+      LtX <- rbind(LtX,t(Xblocks[[pairing[3]]]) * invpenpair[3] + Reduce('rbind', lapply(pairing[1:2],function(i) t(Xblocks[[i]]) * invpenpair[i]))) #
     }
     return(LtX)
   }
